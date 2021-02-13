@@ -1,0 +1,2 @@
+﻿override DesktopApplicationLauncher.Wpf.App.OnExit(System.Windows.ExitEventArgs e) -> void
+override DesktopApplicationLauncher.Wpf.App.OnStartup(System.Windows.StartupEventArgs e) -> void
