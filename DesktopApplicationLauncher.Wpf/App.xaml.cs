@@ -5,12 +5,14 @@
 
     using DesktopApplicationLauncher.Wpf.Infrastructure.Business;
     using DesktopApplicationLauncher.Wpf.Infrastructure.Data;
+    using DesktopApplicationLauncher.Wpf.ViewModels;
+    using DesktopApplicationLauncher.Wpf.Views;
 
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Reviewed. LiteDbContext is disposed at OnExit method.")]
-    public partial class App : Application
+    public partial class App
     {
         private IDbContext _liteDbContext;
 
@@ -18,8 +20,12 @@
         {
             _liteDbContext = new LiteDbContext("DesktopApplicationLauncher.db");
 
-            var applicationService = new ApplicationService(_liteDbContext);
-            applicationService.ListAllApplications();
+            ServiceLocator.Init(new ApplicationService(_liteDbContext));
+
+            var mainWindow = new MainWindow { WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            mainWindow.SourceInitialized += (s, a) => mainWindow.WindowState = WindowState.Maximized;
+            mainWindow.DataContext = new MainViewModel(mainWindow);
+            mainWindow.Show();
 
             base.OnStartup(e);
         }

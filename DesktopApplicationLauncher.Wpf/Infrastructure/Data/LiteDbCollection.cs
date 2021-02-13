@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq.Expressions;
 
     using LiteDB;
 
+    [SuppressMessage("Naming", "CA1711: Identifiers should not have incorrect suffix", Justification = "Reviewed")]
     public sealed class LiteDbCollection<TEntity> : IDbCollection<TEntity>
         where TEntity : class
     {
@@ -28,7 +30,7 @@
             return query.ToList();
         }
 
-        public IList<TDto> List<TDto>(
+        public IList<TDto> ListDto<TDto>(
             Expression<Func<TEntity, TDto>> selectExpression,
             Expression<Func<TEntity, bool>> filter = null,
             Expression<Func<TEntity, object>> orderBy = null,
@@ -46,7 +48,7 @@
 
         public bool ExistsById(object id)
         {
-            return _collection.Exists($"$._id = {id}");
+            return _collection.Exists($"$._id = {id}", Array.Empty<BsonValue>());
         }
 
         public void Insert(TEntity entity)

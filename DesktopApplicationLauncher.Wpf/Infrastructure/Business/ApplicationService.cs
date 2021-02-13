@@ -18,14 +18,15 @@
 
         public IList<ApplicationListItemModel> ListAllApplications()
         {
-            return _dbContext.Applications.List(
+            return _dbContext.Applications.ListDto(
                 x => new ApplicationListItemModel
                          {
                              Id = x.Id,
                              Name = x.Name,
                              Path = x.Path,
                              Arguments = x.Arguments,
-                             LastAccessedDate = x.LastAccessedDate
+                             LastAccessedDate = x.LastAccessedDate,
+                             CreateDate = x.CreateDate
                          }, 
                 orderBy: x => x.SortOrder);
         }
@@ -58,8 +59,7 @@
                                   };
             _dbContext.Applications.Insert(application);
 
-            var applicationId = application.Id;
-            return applicationId;
+            return application.Id;
         }
     }
 }

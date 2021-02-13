@@ -2,16 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq.Expressions;
 
+    [SuppressMessage("Naming", "CA1711: Identifiers should not have incorrect suffix", Justification = "Reviewed")]
     public interface IDbCollection<TEntity> where TEntity : class
     {
         IList<TEntity> List(
-            Expression<Func<TEntity, bool>> filter = null, 
-            Expression<Func<TEntity, object>> orderBy = null, 
+            Expression<Func<TEntity, bool>> filter = null,
+            Expression<Func<TEntity, object>> orderBy = null,
             bool ascending = true);
 
-        IList<TDto> List<TDto>(
+        IList<TDto> ListDto<TDto>(
             Expression<Func<TEntity, TDto>> selectExpression,
             Expression<Func<TEntity, bool>> filter = null,
             Expression<Func<TEntity, object>> orderBy = null,

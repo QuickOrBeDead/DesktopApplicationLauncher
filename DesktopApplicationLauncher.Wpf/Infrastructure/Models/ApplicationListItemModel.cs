@@ -1,17 +1,99 @@
 ﻿namespace DesktopApplicationLauncher.Wpf.Infrastructure.Models
 {
     using System;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
 
-    public sealed class ApplicationListItemModel
+    public sealed class ApplicationListItemModel : INotifyPropertyChanged
     {
+        private DateTime _createDate;
+        private DateTime? _lastAccessedDate;
+        private string _arguments;
+        private string _path;
+        private string _name;
+
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (value == _name)
+                {
+                    return;
+                }
 
-        public string Path { get; set; }
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public string Arguments { get; set; }
+        public string Path
+        {
+            get => _path;
+            set
+            {
+                if (value == _path)
+                {
+                    return;
+                }
 
-        public DateTime? LastAccessedDate { get; set; }
+                _path = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Arguments
+        {
+            get => _arguments;
+            set
+            {
+                if (value == _arguments)
+                {
+                    return;
+                }
+
+                _arguments = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public DateTime? LastAccessedDate
+        {
+            get => _lastAccessedDate;
+            set
+            {
+                if (Nullable.Equals(value, _lastAccessedDate))
+                {
+                    return;
+                }
+
+                _lastAccessedDate = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public DateTime CreateDate
+        {
+            get => _createDate;
+            set
+            {
+                if (value.Equals(_createDate))
+                {
+                    return;
+                }
+
+                _createDate = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
