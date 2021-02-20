@@ -142,79 +142,77 @@
                     </Button>
                 </Border>
                 <ScrollViewer DockPanel.Dock="Bottom" Background="#FFF1F1F1">
-                    <StackPanel>
-                        <StackPanel Margin="10 5">
-                            <ItemsControl ItemsSource="{Binding Apps}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <controls:DraggableBorder Margin="5" 
+                    <controls:DragPanel x:Name="DragPanel" Margin="10 5">
+                        <ItemsControl ItemsSource="{Binding Apps}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <controls:DraggableBorder Margin="5" 
                                                                   Width="80" 
                                                                   Height="90"
                                                                   CornerRadius="3">
-                                                <StackPanel>
-                                                    <Border Width="40" Height="40" CornerRadius="5" Margin="2">
-                                                        <Border.Effect>
-                                                            <DropShadowEffect ShadowDepth="1"/>
-                                                        </Border.Effect>
-                                                        <Border.Background>
-                                                            <ImageBrush ImageSource="{Binding Path, Converter={StaticResource FilePathToIconConverter}}"
+                                        <StackPanel>
+                                            <Border Width="40" Height="40" CornerRadius="5" Margin="2">
+                                                <Border.Effect>
+                                                    <DropShadowEffect ShadowDepth="1"/>
+                                                </Border.Effect>
+                                                <Border.Background>
+                                                    <ImageBrush ImageSource="{Binding Path, Converter={StaticResource FilePathToIconConverter}}"
                                                                     mah:VisibilityHelper.IsVisible="{Binding Path, Converter={StaticResource StringToVisibleIfNotNullOrWhiteSpaceConverter}}" />
-                                                        </Border.Background>
-                                                    </Border>
-                                                    <Border BorderBrush="{x:Null}" Width="80" Height="45">
-                                                        <TextBlock HorizontalAlignment="Center"
+                                                </Border.Background>
+                                            </Border>
+                                            <Border BorderBrush="{x:Null}" Width="80" Height="45">
+                                                <TextBlock HorizontalAlignment="Center"
                                                                VerticalAlignment="Center"
                                                                TextWrapping="Wrap"
                                                                TextTrimming="CharacterEllipsis"
                                                                Text="{Binding Name}" 
                                                                FontSize="10"/>
-                                                    </Border>
+                                            </Border>
+                                        </StackPanel>
+                                        <Border.ToolTip>
+                                            <ToolTip>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Name}" />
+                                                    <TextBlock>Last Accessed: TODO</TextBlock>
                                                 </StackPanel>
-                                                <Border.ToolTip>
-                                                    <ToolTip>
-                                                        <StackPanel>
-                                                            <TextBlock Text="{Binding Name}" />
-                                                            <TextBlock>Last Accessed: TODO</TextBlock>
-                                                        </StackPanel>
-                                                    </ToolTip>
-                                                </Border.ToolTip>
-                                                <Border.InputBindings>
-                                                    <MouseBinding 
+                                            </ToolTip>
+                                        </Border.ToolTip>
+                                        <Border.InputBindings>
+                                            <MouseBinding 
                                                     MouseAction="LeftDoubleClick"
                                                     Command="{Binding DataContext.OpenAppCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:MainWindow}}}"
                                                     CommandParameter="{Binding}" />
-                                                </Border.InputBindings>
-                                                <Border.Style>
-                                                    <Style TargetType="{x:Type Border}">
-                                                        <Style.Triggers>
-                                                            <Trigger Property="IsMouseOver" Value="true">
-                                                                <Setter Property="RenderTransform">
-                                                                    <Setter.Value>
-                                                                        <ScaleTransform ScaleX="1.05" ScaleY="1.05"/>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                                <Setter Property="Background">
-                                                                    <Setter.Value>
-                                                                        <SolidColorBrush Color="White" Opacity="0.3" />
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                                <Setter Property="BorderThickness" Value="1"/>
-                                                                <Setter Property="BorderBrush" Value="Gainsboro"/>
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
-                                            </controls:DraggableBorder>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                        </StackPanel>
-                    </StackPanel>
+                                        </Border.InputBindings>
+                                        <Border.Style>
+                                            <Style TargetType="{x:Type Border}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="true">
+                                                        <Setter Property="RenderTransform">
+                                                            <Setter.Value>
+                                                                <ScaleTransform ScaleX="1.05" ScaleY="1.05"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Setter Property="Background">
+                                                            <Setter.Value>
+                                                                <SolidColorBrush Color="White" Opacity="0.3" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                        <Setter Property="BorderBrush" Value="Gainsboro"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                    </controls:DraggableBorder>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </controls:DragPanel>
                 </ScrollViewer>
             </DockPanel>
         </Border>

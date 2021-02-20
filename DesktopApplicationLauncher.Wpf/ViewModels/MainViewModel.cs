@@ -19,6 +19,7 @@
 
         private readonly IApplicationService _applicationService;
 
+        [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Reviewed")]
         public ObservableCollection<ApplicationListItemModel> Apps
         {
             get => _apps;
@@ -82,12 +83,12 @@
             _ownerWindow = ownerWindow ?? throw new ArgumentNullException(nameof(ownerWindow));
             _applicationService = applicationService ?? throw new ArgumentNullException(nameof(applicationService));
 
-            AddAppCommand = new RelayCommand(AddApp, _ => true);
-            OpenAppCommand = new RelayCommand(OpenApp, _ => true);
+            AddAppCommand = new RelayCommand(AddApp);
+            OpenAppCommand = new RelayCommand(OpenApp);
             DeleteAppCommand = new RelayCommand(RemoveSelectedApp, _ => SelectedApp != null);
             AddAppPathCommand = new RelayCommand(AddAppPath, _ => SelectedApp != null);
             SaveAppCommand = new RelayCommand(SaveApp, _ => SelectedApp != null);
-            CloseAppViewCommand = new RelayCommand(_ => CloseAppView(), _ => true);
+            CloseAppViewCommand = new RelayCommand(_ => CloseAppView());
 
             LoadAllApps();
         }

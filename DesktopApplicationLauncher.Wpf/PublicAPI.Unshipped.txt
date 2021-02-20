@@ -5,7 +5,17 @@ DesktopApplicationLauncher.Wpf.Commands.RelayCommand
 DesktopApplicationLauncher.Wpf.Commands.RelayCommand.CanExecute(object parameter) -> bool
 DesktopApplicationLauncher.Wpf.Commands.RelayCommand.CanExecuteChanged -> System.EventHandler
 DesktopApplicationLauncher.Wpf.Commands.RelayCommand.Execute(object parameter) -> void
-DesktopApplicationLauncher.Wpf.Commands.RelayCommand.RelayCommand(System.Action<object> executeAction, System.Func<object, bool> canExecuteFunc) -> void
+DesktopApplicationLauncher.Wpf.Commands.RelayCommand.RelayCommand(System.Action<object> executeAction, System.Func<object, bool> canExecuteFunc = null) -> void
+DesktopApplicationLauncher.Wpf.Controls.DraggableBorder
+DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.DraggableBorder() -> void
+DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.Index.get -> int
+DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.Index.set -> void
+DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.Move -> System.EventHandler
+DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.StartMoving() -> void
+DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.StopMove -> System.EventHandler
+DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.StopMoving() -> void
+DesktopApplicationLauncher.Wpf.Controls.DragPanel
+DesktopApplicationLauncher.Wpf.Controls.DragPanel.DragPanel() -> void
 DesktopApplicationLauncher.Wpf.Converters.ApplicationItemVisibleIfNullOrWhiteSpaceConverter
 DesktopApplicationLauncher.Wpf.Converters.ApplicationItemVisibleIfNullOrWhiteSpaceConverter.ApplicationItemVisibleIfNullOrWhiteSpaceConverter() -> void
 DesktopApplicationLauncher.Wpf.Converters.ApplicationItemVisibleIfNullOrWhiteSpaceConverter.Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) -> object

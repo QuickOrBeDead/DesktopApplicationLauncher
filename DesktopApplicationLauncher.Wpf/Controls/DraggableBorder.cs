@@ -9,14 +9,20 @@
     public sealed class DraggableBorder : Border
     {
         private bool _isMoving;
-        private Point? _itemPosition;
-        private double _deltaX;
-        private double _deltaY;
-        private TranslateTransform _currentTranslateTransform;
+        private Point _dragStartMousePosition;
+        private UIElement _parent;
+
+        public event EventHandler Move = delegate { };
+
+        public event EventHandler StopMove = delegate { };
+
+        public int Index { get; set; }
 
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
+
+            _parent = GetParent();
 
             MouseDown += DraggableBorder_MouseDown;
             MouseUp += DraggableBorder_MouseUp;
@@ -25,52 +31,54 @@
 
         private void DraggableBorder_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var container = GetParent();
-            if (container == null)
-            {
-                return;
-            }
+            e.Handled = true;
 
-            _itemPosition ??= TransformToAncestor(container).Transform(new Point(0, 0));
+            StartMoving();
+        }
 
-            var mousePosition = Mouse.GetPosition(container);
-            _deltaX = mousePosition.X - _itemPosition.Value.X;
-            _deltaY = mousePosition.Y - _itemPosition.Value.Y;
+        public void StartMoving()
+        {
+            _dragStartMousePosition = GetCurrentMousePosition();
             _isMoving = true;
 
             SetZIndex(1000);
-           
             CaptureMouse();
         }
 
         private void DraggableBorder_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            _currentTranslateTransform = RenderTransform as TranslateTransform;
+            e.Handled = true;
+
+            StopMoving();
+        }
+
+        public void StopMoving()
+        {
             _isMoving = false;
+
+            RenderTransform = new TranslateTransform(0, 0);
 
             SetZIndex(0);
             ReleaseMouseCapture();
+
+            StopMove(this, EventArgs.Empty);
         }
 
         private void DraggableBorder_MouseMove(object sender, MouseEventArgs e)
         {
-            var container = GetParent();
-            if (container == null)
-            {
-                return;
-            }
-
             if (!_isMoving)
             {
                 return;
             }
 
-            var mousePoint = Mouse.GetPosition(container);
+            var currentMousePosition = GetCurrentMousePosition();
 
-            var offsetX = (_currentTranslateTransform == null ? _itemPosition.Value.X : _itemPosition.Value.X - _currentTranslateTransform.X) + _deltaX - mousePoint.X;
-            var offsetY = (_currentTranslateTransform == null ? _itemPosition.Value.Y : _itemPosition.Value.Y - _currentTranslateTransform.Y) + _deltaY - mousePoint.Y;
+            var offsetX = currentMousePosition.X - _dragStartMousePosition.X;
+            var offsetY = currentMousePosition.Y - _dragStartMousePosition.Y;
 
-            RenderTransform = new TranslateTransform(-offsetX, -offsetY);
+            RenderTransform = new TranslateTransform(offsetX, offsetY);
+
+            Move(this, EventArgs.Empty);
         }
 
         private void SetZIndex(int value)
@@ -88,6 +96,11 @@
         private UIElement GetParent()
         {
             return VisualTreeHelper.GetParent(this) as UIElement;
+        }
+
+        private Point GetCurrentMousePosition()
+        {
+            return Mouse.GetPosition(_parent);
         }
     }
 }
