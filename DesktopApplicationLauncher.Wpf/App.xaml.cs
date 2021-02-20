@@ -9,7 +9,7 @@
     using DesktopApplicationLauncher.Wpf.Views;
 
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for App
     /// </summary>
     [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Reviewed. LiteDbContext is disposed at OnExit method.")]
     public partial class App
@@ -20,11 +20,9 @@
         {
             _liteDbContext = new LiteDbContext("DesktopApplicationLauncher.db");
 
-            ServiceLocator.Init(new ApplicationService(_liteDbContext));
-
             var mainWindow = new MainWindow { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             mainWindow.SourceInitialized += (s, a) => mainWindow.WindowState = WindowState.Maximized;
-            mainWindow.DataContext = new MainViewModel(mainWindow);
+            mainWindow.DataContext = new MainViewModel(mainWindow, new ApplicationService(_liteDbContext));
             mainWindow.Show();
 
             base.OnStartup(e);

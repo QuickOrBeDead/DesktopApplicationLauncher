@@ -73,11 +73,6 @@
 
         public ICommand OpenAppCommand { get; }
 
-        public MainViewModel(Window ownerWindow)
-            : this(ownerWindow, ServiceLocator.ApplicationService)
-        {
-        }
-
         public MainViewModel(Window ownerWindow, IApplicationService applicationService)
         {
             _ownerWindow = ownerWindow ?? throw new ArgumentNullException(nameof(ownerWindow));
