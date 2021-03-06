@@ -4,11 +4,20 @@
     using System.Collections;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Input;
 
     using MahApps.Metro.Controls;
 
     public sealed class DragPanel : StackPanel
     {
+        public static readonly DependencyProperty ItemsSwappedProperty = DependencyProperty.Register("ItemsSwapped", typeof(ICommand), typeof(DragPanel), new PropertyMetadata(null));
+
+        public ICommand ItemsSwapped
+        {
+            get => (ICommand)GetValue(ItemsSwappedProperty);
+            set => SetValue(ItemsSwappedProperty, value);
+        }
+
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
@@ -68,7 +77,7 @@
                     });
         }
 
-        private static void ReplaceItems(IList list, int sourceIndex, int targetIndex)
+        private void ReplaceItems(IList list, int sourceIndex, int targetIndex)
         {
             var target = list[targetIndex];
             list[targetIndex] = list[sourceIndex];
@@ -89,6 +98,16 @@
                     var next = list[i];
                     list[i] = target;
                     target = next;
+                }
+            }
+
+            var itemsSwapped = ItemsSwapped;
+            if (itemsSwapped != null)
+            {
+                var sourceTargetTuple = (Math.Min(sourceIndex, targetIndex), Math.Max(sourceIndex, targetIndex));
+                if (itemsSwapped.CanExecute(sourceTargetTuple))
+                {
+                    itemsSwapped.Execute(sourceTargetTuple);
                 }
             }
         }

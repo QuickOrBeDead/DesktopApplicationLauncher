@@ -1,6 +1,7 @@
 ﻿namespace DesktopApplicationLauncher.Wpf.Controls
 {
     using System;
+    using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
@@ -15,6 +16,28 @@
         public event EventHandler Move = delegate { };
 
         public event EventHandler StopMove = delegate { };
+
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register("Command", typeof(ICommand), typeof(DraggableBorder), new PropertyMetadata(null));
+
+        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register("CommandParameter", typeof(object), typeof(DraggableBorder), new PropertyMetadata(null));
+
+        [Bindable(true)]
+        [Category("Action")]
+        [Localizability(LocalizationCategory.NeverLocalize)]
+        public ICommand Command
+        {
+            get => (ICommand)GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
+        }
+
+        [Bindable(true)]
+        [Category("Action")]
+        [Localizability(LocalizationCategory.NeverLocalize)]
+        public object CommandParameter
+        {
+            get => GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
+        }
 
         public int Index { get; set; }
 
@@ -31,13 +54,13 @@
 
         private void DraggableBorder_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (e.LeftButton != MouseButtonState.Pressed)
+            {
+                return;
+            }
+
             e.Handled = true;
 
-            StartMoving();
-        }
-
-        public void StartMoving()
-        {
             _dragStartMousePosition = GetCurrentMousePosition();
             _isMoving = true;
 
@@ -50,6 +73,15 @@
             e.Handled = true;
 
             StopMoving();
+
+            if (_dragStartMousePosition == GetCurrentMousePosition())
+            {
+                var command = Command;
+                if (command != null && command.CanExecute(CommandParameter))
+                {
+                    command.Execute(CommandParameter);
+                }
+            }
         }
 
         public void StopMoving()
@@ -66,7 +98,7 @@
 
         private void DraggableBorder_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!_isMoving)
+            if (!_isMoving || e.LeftButton != MouseButtonState.Pressed)
             {
                 return;
             }
