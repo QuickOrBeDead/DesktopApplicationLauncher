@@ -43,9 +43,34 @@
             return applicationId;
         }
 
+        public void UpdateApplication(ApplicationUpdateModel updateModel)
+        {
+            if (updateModel == null)
+            {
+                throw new ArgumentNullException(nameof(updateModel));
+            }
+
+            _dbContext.Applications.Update(
+                _ => new Application
+                         {
+                             Name = updateModel.Name, Path = updateModel.Path, Arguments = updateModel.Arguments
+                         },
+                x => x.Id == updateModel.Id);
+        }
+
+        public void UpdateApplicationOrder(int id, int sortOrder)
+        {
+            _dbContext.Applications.Update(_ => new Application { SortOrder = sortOrder }, x => x.Id == id);
+        }
+
+        public void DeleteApp(int id)
+        {
+            _dbContext.Applications.Delete(id);
+        }
+
         private void UpdateSortOrder(int applicationId, int sortOrder)
         {
-            _dbContext.Applications.Update(x => new Application { SortOrder = sortOrder }, x => x.Id == applicationId);
+            _dbContext.Applications.Update(_ => new Application { SortOrder = sortOrder }, x => x.Id == applicationId);
         }
 
         private int InsertApplication(ApplicationAddModel addModel)

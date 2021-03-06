@@ -13,9 +13,9 @@
         private readonly ILiteDatabase _database;
         private bool _disposed;
 
-        public LiteDbContext(string dbName)
+        public LiteDbContext(string connectionString)
         {
-            _database = new LiteDatabase(dbName);
+            _database = new LiteDatabase(connectionString);
 
             Applications = new LiteDbCollection<Application>(_database);
         }

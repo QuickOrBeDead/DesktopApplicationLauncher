@@ -73,6 +73,8 @@
 
         public ICommand OpenAppCommand { get; }
 
+        public ICommand SwapAppsCommand { get; }
+
         public MainViewModel(Window ownerWindow, IApplicationService applicationService)
         {
             _ownerWindow = ownerWindow ?? throw new ArgumentNullException(nameof(ownerWindow));
@@ -84,13 +86,25 @@
             AddAppPathCommand = new RelayCommand(AddAppPath, _ => SelectedApp != null);
             SaveAppCommand = new RelayCommand(SaveApp, _ => SelectedApp != null);
             CloseAppViewCommand = new RelayCommand(_ => CloseAppView());
+            SwapAppsCommand = new RelayCommand(SwapApps);
 
             LoadAllApps();
         }
 
+        private void SwapApps(object parameter)
+        {
+            (int startIndex, int endIndex) = ((int, int))parameter;
+
+            for (var i = startIndex; i <= endIndex; i++)
+            {
+                var item = Apps[i];
+                _applicationService.UpdateApplicationOrder(item.Id, i);
+            }
+        }
+
         private void AddApp(object parameter)
         {
-            SelectedApp = CreateAddApp();
+            SelectedApp = parameter is ApplicationListItemModel model ? model : CreateAddApp();
             AppViewWidth = 250;
         }
 
@@ -103,7 +117,8 @@
 
         private void RemoveSelectedApp(object parameter)
         {
-            throw new NotImplementedException();
+            var selectedApp = SelectedApp;
+            _applicationService.DeleteApp(selectedApp.Id);
         }
 
         [SuppressMessage("Microsoft.Design", "CA1031: Do not catch general exception types", Justification = "REviewed")]
@@ -129,7 +144,26 @@
 
         private void SaveAppToDb()
         {
-            _applicationService.AddApplication(CreateAppAddModel());
+            var selectedApp = SelectedApp;
+            if (selectedApp.Id > 0)
+            {
+                _applicationService.UpdateApplication(new ApplicationUpdateModel
+                                                       {
+                                                           Id = selectedApp.Id,
+                                                           Name = selectedApp.Name,
+                                                           Arguments = selectedApp.Arguments,
+                                                           Path = selectedApp.Path
+                                                       });
+            }
+            else
+            {
+                _applicationService.AddApplication(new ApplicationAddModel
+                                                       {
+                                                           Name = selectedApp.Name,
+                                                           Arguments = selectedApp.Arguments,
+                                                           Path = selectedApp.Path
+                                                       });
+            }
         }
 
         private void CloseAppView()
@@ -140,17 +174,6 @@
         private void LoadAllApps()
         {
             Apps = new ObservableCollection<ApplicationListItemModel>(_applicationService.ListAllApplications());
-        }
-
-        private ApplicationAddModel CreateAppAddModel()
-        {
-            var selectedApp = SelectedApp;
-            return new ApplicationAddModel
-                       {
-                           Name = selectedApp.Name,
-                           Arguments = selectedApp.Arguments,
-                           Path = selectedApp.Path
-                       };
         }
 
         private ApplicationListItemModel CreateAddApp()
