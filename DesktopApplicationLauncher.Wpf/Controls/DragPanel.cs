@@ -27,10 +27,7 @@
 
         private void DragPanel_Loaded(object sender, RoutedEventArgs e)
         {
-            ForEachItems(draggableBorder =>
-                {
-                    draggableBorder.StopMove += DraggableBorder_StopMove;
-                });
+            ForEachItems(draggableBorder => draggableBorder.StopMove += DraggableBorder_StopMove);
 
             SetDraggableItemsIndexes();
         }

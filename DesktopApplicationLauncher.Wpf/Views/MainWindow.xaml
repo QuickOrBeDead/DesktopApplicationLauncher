@@ -150,11 +150,17 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <controls:DraggableBorder Margin="5" 
-                                                                  Width="80" 
-                                                                  Height="90"
-                                                                  CornerRadius="3"
-                                                                  Command="{Binding DataContext.AddAppCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:MainWindow}}}"
-                                                                  CommandParameter="{Binding}">
+                                                              Width="80" 
+                                                              Height="90"
+                                                              CornerRadius="3"
+                                                              Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:MainWindow}}}">
+                                        <Border.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Edit" 
+                                                          Command="{Binding Parent.Tag.AddAppCommand, RelativeSource={RelativeSource Self}}"
+                                                          CommandParameter="{Binding}" />
+                                            </ContextMenu>
+                                        </Border.ContextMenu>
                                         <StackPanel>
                                             <Border Width="40" Height="40" CornerRadius="5" Margin="2">
                                                 <Border.Effect>

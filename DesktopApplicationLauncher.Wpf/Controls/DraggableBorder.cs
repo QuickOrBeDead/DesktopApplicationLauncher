@@ -54,6 +54,19 @@
 
         private void DraggableBorder_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                if (ContextMenu != null)
+                {
+                    ContextMenu.Tag = Tag;
+                    ContextMenu.DataContext = DataContext;
+                    ContextMenu.IsOpen = true;
+                }
+
+                e.Handled = true;
+                return;
+            }
+
             if (e.LeftButton != MouseButtonState.Pressed)
             {
                 return;
