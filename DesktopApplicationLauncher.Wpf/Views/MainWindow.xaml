@@ -23,6 +23,7 @@
         <converters:FilePathToFileNameConverter x:Key="FilePathToFileNameConverter" />
         <converters:FilePathToIconConverter x:Key="FilePathToIconConverter" />
         <converters:ApplicationItemVisibleIfNullOrWhiteSpaceConverter x:Key="ApplicationItemVisibleIfNullOrWhiteSpaceConverter" />
+        <converters:VisibleIfNotNullConverter x:Key="VisibleIfNotNullConverter" />
     </mah:MetroWindow.Resources>
     <DockPanel>
         <Border DockPanel.Dock="Left"
@@ -184,7 +185,9 @@
                                             <ToolTip>
                                                 <StackPanel>
                                                     <TextBlock Text="{Binding Name}" />
-                                                    <TextBlock>Last Accessed: TODO</TextBlock>
+                                                    <TextBlock FontSize="9" 
+                                                               Text="{Binding LastAccessedDate, StringFormat=Last Accessed: {0:dd-MM-yyyy HH:mm}}"
+                                                               mah:VisibilityHelper.IsVisible="{Binding LastAccessedDate, Converter={StaticResource VisibleIfNotNullConverter}}"/>
                                                 </StackPanel>
                                             </ToolTip>
                                         </Border.ToolTip>

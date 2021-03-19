@@ -19,6 +19,8 @@ DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.StopMove -> System.Event
 DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.StopMoving() -> void
 DesktopApplicationLauncher.Wpf.Controls.DragPanel
 DesktopApplicationLauncher.Wpf.Controls.DragPanel.DragPanel() -> void
+DesktopApplicationLauncher.Wpf.Controls.DragPanel.ItemsSwapped.get -> System.Windows.Input.ICommand
+DesktopApplicationLauncher.Wpf.Controls.DragPanel.ItemsSwapped.set -> void
 DesktopApplicationLauncher.Wpf.Converters.ApplicationItemVisibleIfNullOrWhiteSpaceConverter
 DesktopApplicationLauncher.Wpf.Converters.ApplicationItemVisibleIfNullOrWhiteSpaceConverter.ApplicationItemVisibleIfNullOrWhiteSpaceConverter() -> void
 DesktopApplicationLauncher.Wpf.Converters.ApplicationItemVisibleIfNullOrWhiteSpaceConverter.Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) -> object
@@ -39,15 +41,25 @@ DesktopApplicationLauncher.Wpf.Converters.StringToVisibleIfNullOrWhiteSpaceConve
 DesktopApplicationLauncher.Wpf.Converters.StringToVisibleIfNullOrWhiteSpaceConverter.Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) -> object
 DesktopApplicationLauncher.Wpf.Converters.StringToVisibleIfNullOrWhiteSpaceConverter.ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) -> object
 DesktopApplicationLauncher.Wpf.Converters.StringToVisibleIfNullOrWhiteSpaceConverter.StringToVisibleIfNullOrWhiteSpaceConverter() -> void
+DesktopApplicationLauncher.Wpf.Converters.VisibleIfNotNullConverter
+DesktopApplicationLauncher.Wpf.Converters.VisibleIfNotNullConverter.Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) -> object
+DesktopApplicationLauncher.Wpf.Converters.VisibleIfNotNullConverter.ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) -> object
+DesktopApplicationLauncher.Wpf.Converters.VisibleIfNotNullConverter.VisibleIfNotNullConverter() -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.AddApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel addModel) -> int
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.ApplicationService(DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbContext dbContext) -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.DeleteApp(int id) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.ListAllApplications() -> System.Collections.Generic.IList<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel>
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel updateModel) -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplicationLastAccessDate(int id) -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplicationOrder(int id, int sortOrder) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.AddApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel addModel) -> int
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.DeleteApp(int id) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.ListAllApplications() -> System.Collections.Generic.IList<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel>
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.UpdateApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel updateModel) -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.UpdateApplicationLastAccessDate(int id) -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.UpdateApplicationOrder(int id, int sortOrder) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ServiceLocator
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>.Delete(object id) -> void
@@ -132,12 +144,12 @@ DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.AppViewWidth.get -> int
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.AppViewWidth.set -> void
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.CloseAppViewCommand.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.DeleteAppCommand.get -> System.Windows.Input.ICommand
-DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.MainViewModel(System.Windows.Window ownerWindow) -> void
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.MainViewModel(System.Windows.Window ownerWindow, DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService applicationService) -> void
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.OpenAppCommand.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.SaveAppCommand.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.SelectedApp.get -> DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.SelectedApp.set -> void
+DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.SwapAppsCommand.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.ViewModels.ViewModelBase
 DesktopApplicationLauncher.Wpf.ViewModels.ViewModelBase.PropertyChanged -> System.ComponentModel.PropertyChangedEventHandler
 DesktopApplicationLauncher.Wpf.ViewModels.ViewModelBase.ViewModelBase() -> void
@@ -150,4 +162,5 @@ static DesktopApplicationLauncher.Wpf.App.Main() -> void
 static DesktopApplicationLauncher.Wpf.Infrastructure.Business.ServiceLocator.ApplicationService.get -> DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService
 static readonly DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.CommandParameterProperty -> System.Windows.DependencyProperty
 static readonly DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.CommandProperty -> System.Windows.DependencyProperty
+static readonly DesktopApplicationLauncher.Wpf.Controls.DragPanel.ItemsSwappedProperty -> System.Windows.DependencyProperty
 virtual DesktopApplicationLauncher.Wpf.ViewModels.ViewModelBase.OnPropertyChanged(string propertyName = null) -> void

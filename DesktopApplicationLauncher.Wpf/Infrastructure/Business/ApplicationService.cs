@@ -68,6 +68,15 @@
             _dbContext.Applications.Delete(id);
         }
 
+        public DateTime UpdateApplicationLastAccessDate(int id)
+        {
+            var lastAccessedDate = DateTime.Now;
+
+            _dbContext.Applications.Update(_ => new Application { LastAccessedDate = lastAccessedDate }, x => x.Id == id);
+
+            return lastAccessedDate;
+        }
+
         private void UpdateSortOrder(int applicationId, int sortOrder)
         {
             _dbContext.Applications.Update(_ => new Application { SortOrder = sortOrder }, x => x.Id == applicationId);

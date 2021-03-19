@@ -122,7 +122,7 @@
             _applicationService.DeleteApp(selectedApp.Id);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1031: Do not catch general exception types", Justification = "REviewed")]
+        [SuppressMessage("Microsoft.Design", "CA1031: Do not catch general exception types", Justification = "Reviewed")]
         private void OpenApp(object parameter)
         {
             if (parameter is ApplicationListItemModel appItem)
@@ -135,6 +135,8 @@
                                           UseShellExecute = true,
                                           WorkingDirectory = Path.GetDirectoryName(appItem.Path)!
                                       });
+
+                    appItem.LastAccessedDate = _applicationService.UpdateApplicationLastAccessDate(appItem.Id);
                 }
                 catch (Exception exception)
                 {
