@@ -4,6 +4,7 @@
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.IO;
     using System.Windows;
     using System.Windows.Input;
 
@@ -131,7 +132,8 @@
                     Process.Start(new ProcessStartInfo(appItem.Path)
                                       {
                                           Arguments = appItem.Arguments,
-                                          UseShellExecute = true
+                                          UseShellExecute = true,
+                                          WorkingDirectory = Path.GetDirectoryName(appItem.Path)!
                                       });
                 }
                 catch (Exception exception)
