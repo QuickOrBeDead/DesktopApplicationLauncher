@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
     using System.Windows.Input;
 
     using MahApps.Metro.Controls;
@@ -22,29 +23,36 @@
         {
             base.OnInitialized(e);
 
-            Loaded += DragPanel_Loaded;
-        }
+            var itemsControl = GetItemsControl();
+            if (itemsControl != null)
+            {
+                itemsControl.ItemContainerGenerator.StatusChanged += (o, _) =>
+                    {
+                        var itemContainerGenerator = (ItemContainerGenerator)o;
+                        if (itemContainerGenerator == null || itemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
+                        {
+                            return;
+                        }
 
-        private void DragPanel_Loaded(object sender, RoutedEventArgs e)
-        {
-            ForEachItems(draggableBorder => draggableBorder.StopMove += DraggableBorder_StopMove);
-
-            SetDraggableItemsIndexes();
+                        var items = itemsControl.Items;
+                        for (var i = 0; i < items.Count; i++)
+                        {
+                            var contentPresenter = (ContentPresenter)itemContainerGenerator.ContainerFromIndex(i);
+                            var index = i;
+                            contentPresenter.Loaded += (cp, _) =>
+                                {
+                                    var draggableBorder = ((ContentPresenter)cp).FindChild<DraggableBorder>();
+                                    draggableBorder.Index = index;
+                                    draggableBorder.StopMove += DraggableBorder_StopMove;
+                                };
+                        }
+                    };
+            }
         }
 
         private void DraggableBorder_StopMove(object sender, EventArgs e)
         {
             SwapItemsOnCollision(sender);
-        }
-
-        private void SetDraggableItemsIndexes()
-        {
-            var index = 0;
-            ForEachItems(
-                draggableBorder =>
-                    {
-                        draggableBorder.Index = index++;
-                    });
         }
 
         private void SwapItemsOnCollision(object sender)
@@ -72,6 +80,12 @@
                             }
                         }
                     });
+        }
+
+        private void SetDraggableItemsIndexes()
+        {
+            var index = 0;
+            ForEachItems(draggableBorder => draggableBorder.Index = index++);
         }
 
         private void ReplaceItems(IList list, int sourceIndex, int targetIndex)
@@ -129,8 +143,7 @@
 
         private ItemsControl GetItemsControl()
         {
-            var itemsControl = Children.Count == 0 ? null : Children[0] as ItemsControl;
-            return itemsControl;
+            return Children.Count == 0 ? null : Children[0] as ItemsControl;
         }
     }
 }
