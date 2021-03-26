@@ -11,6 +11,7 @@
         private string _arguments;
         private string _path;
         private string _name;
+        private int _sortOrder;
 
         public int Id { get; set; }
 
@@ -85,6 +86,21 @@
                 }
 
                 _createDate = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int SortOrder
+        {
+            get => _sortOrder;
+            set
+            {
+                if (value.Equals(_sortOrder))
+                {
+                    return;
+                }
+
+                _sortOrder = value;
                 OnPropertyChanged();
             }
         }

@@ -7,5 +7,7 @@
         public string Path { get; set; }
 
         public string Arguments { get; set; }
+
+        public int SortOrder { get; set; }
     }
 }

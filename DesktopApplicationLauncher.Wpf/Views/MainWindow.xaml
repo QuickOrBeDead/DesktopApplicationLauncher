@@ -67,7 +67,7 @@
                                 TextAlignment="Center" />
                         </StackPanel>
                         <Button Grid.Column="2"
-                                Command="{Binding DeleteAppCommand}">
+                                Command="{Binding DeleteSelectedAppCommand}">
                             <Button.ContentTemplate>
                                 <DataTemplate>
                                     <StackPanel>
@@ -159,6 +159,9 @@
                                             <ContextMenu>
                                                 <MenuItem Header="Edit" 
                                                           Command="{Binding Parent.Tag.AddAppCommand, RelativeSource={RelativeSource Self}}"
+                                                          CommandParameter="{Binding}" />
+                                                <MenuItem Header="Delete" 
+                                                          Command="{Binding Parent.Tag.DeleteAppCommand, RelativeSource={RelativeSource Self}}"
                                                           CommandParameter="{Binding}" />
                                             </ContextMenu>
                                         </Border.ContextMenu>

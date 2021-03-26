@@ -5,6 +5,7 @@
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Input;
 
@@ -62,6 +63,8 @@
             }
         }
 
+        public ICommand DeleteSelectedAppCommand { get; }
+
         public ICommand DeleteAppCommand { get; }
 
         public ICommand CloseAppViewCommand { get; }
@@ -83,7 +86,8 @@
 
             AddAppCommand = new RelayCommand(AddApp);
             OpenAppCommand = new RelayCommand(OpenApp);
-            DeleteAppCommand = new RelayCommand(RemoveSelectedApp, _ => SelectedApp != null);
+            DeleteAppCommand = new RelayCommand(DeleteApp);
+            DeleteSelectedAppCommand = new RelayCommand(DeleteApp, _ => SelectedApp != null && SelectedApp.Id > 0);
             AddAppPathCommand = new RelayCommand(AddAppPath, _ => SelectedApp != null);
             SaveAppCommand = new RelayCommand(SaveApp, _ => SelectedApp != null);
             CloseAppViewCommand = new RelayCommand(_ => CloseAppView());
@@ -116,10 +120,19 @@
             LoadAllApps();
         }
 
-        private void RemoveSelectedApp(object parameter)
+        private void DeleteApp(object parameter)
         {
-            var selectedApp = SelectedApp;
+            var selectedApp = parameter as ApplicationListItemModel ?? SelectedApp;
+            if (selectedApp == null)
+            {
+                return;
+            }
+
             _applicationService.DeleteApp(selectedApp.Id);
+
+            SelectedApp = null;
+            CloseAppView();
+            LoadAllApps();
         }
 
         [SuppressMessage("Microsoft.Design", "CA1031: Do not catch general exception types", Justification = "Reviewed")]
@@ -165,7 +178,8 @@
                                                        {
                                                            Name = selectedApp.Name,
                                                            Arguments = selectedApp.Arguments,
-                                                           Path = selectedApp.Path
+                                                           Path = selectedApp.Path,
+                                                           SortOrder = Apps.Select(x => x.SortOrder).DefaultIfEmpty().Max() + 1
                                                        });
             }
         }

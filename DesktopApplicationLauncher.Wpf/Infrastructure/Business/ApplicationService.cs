@@ -26,6 +26,7 @@
                              Path = x.Path,
                              Arguments = x.Arguments,
                              LastAccessedDate = x.LastAccessedDate,
+                             SortOrder = x.SortOrder,
                              CreateDate = x.CreateDate
                          }, 
                 orderBy: x => x.SortOrder);
@@ -38,9 +39,17 @@
                 throw new ArgumentNullException(nameof(addModel));
             }
 
-            var applicationId = InsertApplication(addModel);
-            UpdateSortOrder(applicationId, applicationId);
-            return applicationId;
+            var application = new Application
+                                  {
+                                      Name = addModel.Name,
+                                      Path = addModel.Path,
+                                      Arguments = addModel.Arguments,
+                                      SortOrder = addModel.SortOrder,
+                                      CreateDate = DateTime.Now
+                                  };
+            _dbContext.Applications.Insert(application);
+
+            return application.Id;
         }
 
         public void UpdateApplication(ApplicationUpdateModel updateModel)
@@ -75,25 +84,6 @@
             _dbContext.Applications.Update(_ => new Application { LastAccessedDate = lastAccessedDate }, x => x.Id == id);
 
             return lastAccessedDate;
-        }
-
-        private void UpdateSortOrder(int applicationId, int sortOrder)
-        {
-            _dbContext.Applications.Update(_ => new Application { SortOrder = sortOrder }, x => x.Id == applicationId);
-        }
-
-        private int InsertApplication(ApplicationAddModel addModel)
-        {
-            var application = new Application
-                                  {
-                                      Name = addModel.Name,
-                                      Path = addModel.Path,
-                                      Arguments = addModel.Arguments,
-                                      CreateDate = DateTime.Now
-                                  };
-            _dbContext.Applications.Insert(application);
-
-            return application.Id;
         }
     }
 }
