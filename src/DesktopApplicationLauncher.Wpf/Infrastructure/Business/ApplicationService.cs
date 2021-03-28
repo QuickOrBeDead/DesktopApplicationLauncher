@@ -28,7 +28,7 @@
                              LastAccessedDate = x.LastAccessedDate,
                              SortOrder = x.SortOrder,
                              CreateDate = x.CreateDate
-                         }, 
+                        },
                 orderBy: x => x.SortOrder);
         }
 

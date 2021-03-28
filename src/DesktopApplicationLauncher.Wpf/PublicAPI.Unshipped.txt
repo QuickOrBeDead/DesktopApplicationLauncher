@@ -51,16 +51,15 @@ DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.Applic
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.DeleteApp(int id) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.ListAllApplications() -> System.Collections.Generic.IList<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel>
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel updateModel) -> void
-DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplicationLastAccessDate(int id) -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplicationLastAccessDate(int id) -> System.DateTime
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplicationOrder(int id, int sortOrder) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.AddApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel addModel) -> int
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.DeleteApp(int id) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.ListAllApplications() -> System.Collections.Generic.IList<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel>
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.UpdateApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel updateModel) -> void
-DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.UpdateApplicationLastAccessDate(int id) -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.UpdateApplicationLastAccessDate(int id) -> System.DateTime
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.UpdateApplicationOrder(int id, int sortOrder) -> void
-DesktopApplicationLauncher.Wpf.Infrastructure.Business.ServiceLocator
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>.Delete(object id) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>.ExistsById(object id) -> bool
@@ -110,6 +109,8 @@ DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.Name.ge
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.Name.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.Path.get -> string
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.Path.set -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.SortOrder.get -> int
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.SortOrder.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.ApplicationListItemModel() -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.Arguments.get -> string
@@ -125,6 +126,8 @@ DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.Na
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.Path.get -> string
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.Path.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.PropertyChanged -> System.ComponentModel.PropertyChangedEventHandler
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.SortOrder.get -> int
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.SortOrder.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.ApplicationUpdateModel() -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.Arguments.get -> string
@@ -144,6 +147,7 @@ DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.AppViewWidth.get -> int
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.AppViewWidth.set -> void
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.CloseAppViewCommand.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.DeleteAppCommand.get -> System.Windows.Input.ICommand
+DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.DeleteSelectedAppCommand.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.MainViewModel(System.Windows.Window ownerWindow, DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService applicationService) -> void
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.OpenAppCommand.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.SaveAppCommand.get -> System.Windows.Input.ICommand
@@ -159,7 +163,6 @@ DesktopApplicationLauncher.Wpf.Views.MainWindow.MainWindow() -> void
 override DesktopApplicationLauncher.Wpf.App.OnExit(System.Windows.ExitEventArgs e) -> void
 override DesktopApplicationLauncher.Wpf.App.OnStartup(System.Windows.StartupEventArgs e) -> void
 static DesktopApplicationLauncher.Wpf.App.Main() -> void
-static DesktopApplicationLauncher.Wpf.Infrastructure.Business.ServiceLocator.ApplicationService.get -> DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService
 static readonly DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.CommandParameterProperty -> System.Windows.DependencyProperty
 static readonly DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.CommandProperty -> System.Windows.DependencyProperty
 static readonly DesktopApplicationLauncher.Wpf.Controls.DragPanel.ItemsSwappedProperty -> System.Windows.DependencyProperty
