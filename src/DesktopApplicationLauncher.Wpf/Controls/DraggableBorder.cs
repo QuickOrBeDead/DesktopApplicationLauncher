@@ -90,7 +90,7 @@
             if (_dragStartMousePosition == GetCurrentMousePosition())
             {
                 var command = Command;
-                if (command != null && command.CanExecute(CommandParameter))
+                if (command?.CanExecute(CommandParameter) == true)
                 {
                     command.Execute(CommandParameter);
                 }
