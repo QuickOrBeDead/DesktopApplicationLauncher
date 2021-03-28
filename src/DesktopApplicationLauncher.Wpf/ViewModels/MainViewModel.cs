@@ -207,6 +207,7 @@
             if (openFileDialog.ShowDialog() == true)
             {
                 SelectedApp.Path = openFileDialog.FileName;
+                SelectedApp.Name = Path.GetFileNameWithoutExtension(openFileDialog.FileName);
             }
         }
     }
