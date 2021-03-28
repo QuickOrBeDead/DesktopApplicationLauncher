@@ -36,6 +36,11 @@
             Expression<Func<TEntity, object>> orderBy = null,
             bool ascending = true)
         {
+            if (selectExpression == null)
+            {
+                throw new ArgumentNullException(nameof(selectExpression));
+            }
+
             var query = Query(filter, orderBy, ascending);
 
             return query.Select(selectExpression).ToList();
@@ -68,7 +73,7 @@
 
         public void Delete(object id)
         {
-            _collection.Delete((int)id);
+            _collection.Delete(new BsonValue(id));
         }
 
         private ILiteQueryable<TEntity> Query(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, object>> orderBy, bool ascending)
