@@ -49,14 +49,14 @@ DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.AddApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel addModel) -> int
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.ApplicationService(DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbContext dbContext) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.DeleteApp(int id) -> void
-DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.ListAllApplications() -> System.Collections.Generic.IList<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel>
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.ListAllApplications(int? parentId = null) -> System.Collections.Generic.IList<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel>
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel updateModel) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplicationLastAccessDate(int id) -> System.DateTime
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplicationOrder(int id, int sortOrder) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.AddApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel addModel) -> int
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.DeleteApp(int id) -> void
-DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.ListAllApplications() -> System.Collections.Generic.IList<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel>
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.ListAllApplications(int? parentId = null) -> System.Collections.Generic.IList<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel>
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.UpdateApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel updateModel) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.UpdateApplicationLastAccessDate(int id) -> System.DateTime
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.UpdateApplicationOrder(int id, int sortOrder) -> void
@@ -87,6 +87,8 @@ DesktopApplicationLauncher.Wpf.Infrastructure.Data.LiteDbContext.Dispose() -> vo
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.LiteDbContext.LiteDbContext(string connectionString) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.Application() -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.ItemType.get -> DesktopApplicationLauncher.Wpf.Infrastructure.Entities.ApplicationItemType
+DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.ItemType.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.Arguments.get -> string
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.Arguments.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.CreateDate.get -> System.DateTime
@@ -97,16 +99,26 @@ DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.LastAccessedD
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.LastAccessedDate.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.Name.get -> string
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.Name.set -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.ParentId.get -> int?
+DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.ParentId.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.Path.get -> string
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.Path.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.SortOrder.get -> int
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.SortOrder.set -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Entities.ApplicationItemType
+DesktopApplicationLauncher.Wpf.Infrastructure.Entities.ApplicationItemType.File = 0 -> DesktopApplicationLauncher.Wpf.Infrastructure.Entities.ApplicationItemType
+DesktopApplicationLauncher.Wpf.Infrastructure.Entities.ApplicationItemType.Folder = 1 -> DesktopApplicationLauncher.Wpf.Infrastructure.Entities.ApplicationItemType
+DesktopApplicationLauncher.Wpf.Infrastructure.Entities.ApplicationItemType.Website = 2 -> DesktopApplicationLauncher.Wpf.Infrastructure.Entities.ApplicationItemType
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.ApplicationAddModel() -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.Arguments.get -> string
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.Arguments.set -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.ItemType.get -> DesktopApplicationLauncher.Wpf.Infrastructure.Entities.ApplicationItemType
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.ItemType.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.Name.get -> string
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.Name.set -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.ParentId.get -> int?
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.ParentId.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.Path.get -> string
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.Path.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel.SortOrder.get -> int
@@ -136,6 +148,8 @@ DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.Id.g
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.Id.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.Name.get -> string
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.Name.set -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.ParentId.get -> int?
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.ParentId.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.Path.get -> string
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.Path.set -> void
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel

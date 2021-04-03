@@ -7,7 +7,7 @@
 
     public interface IApplicationService
     {
-        IList<ApplicationListItemModel> ListAllApplications();
+        IList<ApplicationListItemModel> ListAllApplications(int? parentId = null);
 
         int AddApplication(ApplicationAddModel addModel);
 
@@ -18,5 +18,7 @@
         void DeleteApp(int id);
 
         DateTime UpdateApplicationLastAccessDate(int id);
+
+        void ConvertToFolder(int id, string folderName = null);
     }
 }

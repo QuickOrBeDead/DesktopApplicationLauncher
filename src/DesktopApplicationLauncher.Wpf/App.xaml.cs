@@ -9,6 +9,8 @@
     using DesktopApplicationLauncher.Wpf.ViewModels;
     using DesktopApplicationLauncher.Wpf.Views;
 
+    using LiteDB;
+
     using Microsoft.Extensions.Configuration;
 
     /// <summary>
@@ -25,6 +27,8 @@
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true)
                 .Build();
+
+            BsonMapper.Global.EnumAsInteger = true;
 
             _liteDbContext = new LiteDbContext(configuration.GetConnectionString("AppDb"));
 

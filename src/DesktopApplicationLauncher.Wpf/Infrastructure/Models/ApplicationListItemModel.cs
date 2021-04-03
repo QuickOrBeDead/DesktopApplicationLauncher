@@ -4,6 +4,8 @@
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
 
+    using DesktopApplicationLauncher.Wpf.Infrastructure.Entities;
+
     public sealed class ApplicationListItemModel : INotifyPropertyChanged
     {
         private DateTime _createDate;
@@ -12,6 +14,8 @@
         private string _path;
         private string _name;
         private int _sortOrder;
+
+        private ApplicationItemType _itemType;
 
         public int Id { get; set; }
 
@@ -101,6 +105,22 @@
                 }
 
                 _sortOrder = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ApplicationItemType ItemType
+        {
+            get => _itemType;
+            set
+            {
+                if (value.Equals(_itemType))
+                {
+                    return;
+                }
+
+                _itemType = value;
+
                 OnPropertyChanged();
             }
         }

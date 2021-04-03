@@ -163,6 +163,9 @@
                                                 <MenuItem Header="Delete" 
                                                           Command="{Binding Parent.Tag.DeleteAppCommand, RelativeSource={RelativeSource Self}}"
                                                           CommandParameter="{Binding}" />
+                                                <MenuItem Header="Convert To Folder" 
+                                                          Command="{Binding Parent.Tag.ConvertToFolderCommand, RelativeSource={RelativeSource Self}}"
+                                                          CommandParameter="{Binding}" />
                                             </ContextMenu>
                                         </Border.ContextMenu>
                                         <StackPanel>

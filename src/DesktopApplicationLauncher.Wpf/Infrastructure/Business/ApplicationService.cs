@@ -16,7 +16,7 @@
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public IList<ApplicationListItemModel> ListAllApplications()
+        public IList<ApplicationListItemModel> ListAllApplications(int? parentId = null)
         {
             return _dbContext.Applications.ListDto(
                 x => new ApplicationListItemModel
@@ -27,9 +27,11 @@
                              Arguments = x.Arguments,
                              LastAccessedDate = x.LastAccessedDate,
                              SortOrder = x.SortOrder,
+                             ItemType = x.ItemType ?? ApplicationItemType.File,
                              CreateDate = x.CreateDate
                         },
-                orderBy: x => x.SortOrder);
+                x => x.ParentId == parentId,
+                x => x.SortOrder);
         }
 
         public int AddApplication(ApplicationAddModel addModel)
@@ -41,7 +43,9 @@
 
             var application = new Application
                                   {
+                                      ParentId = addModel.ParentId,
                                       Name = addModel.Name,
+                                      ItemType = addModel.ItemType,
                                       Path = addModel.Path,
                                       Arguments = addModel.Arguments,
                                       SortOrder = addModel.SortOrder,
@@ -62,7 +66,10 @@
             _dbContext.Applications.Update(
                 _ => new Application
                          {
-                             Name = updateModel.Name, Path = updateModel.Path, Arguments = updateModel.Arguments
+                             ParentId = updateModel.ParentId,
+                             Name = updateModel.Name,
+                             Path = updateModel.Path, 
+                             Arguments = updateModel.Arguments
                          },
                 x => x.Id == updateModel.Id);
         }
@@ -84,6 +91,24 @@
             _dbContext.Applications.Update(_ => new Application { LastAccessedDate = lastAccessedDate }, x => x.Id == id);
 
             return lastAccessedDate;
+        }
+
+        public void ConvertToFolder(int id, string folderName = null)
+        {
+            var application = _dbContext.Applications.GetById(id);
+            if (application.ItemType == ApplicationItemType.Folder)
+            {
+                return;
+            }
+
+            var folderId = AddApplication(new ApplicationAddModel
+                                                    {
+                                                        Name = folderName ?? application.Name, 
+                                                        ItemType = ApplicationItemType.Folder,
+                                                        ParentId = application.ParentId,
+                                                        SortOrder = application.SortOrder
+                                                    });
+            _dbContext.Applications.Update(_ => new Application { ParentId = folderId, SortOrder = 0 }, x => x.Id == id);
         }
     }
 }

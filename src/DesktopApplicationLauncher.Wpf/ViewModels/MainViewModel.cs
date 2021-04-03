@@ -11,6 +11,7 @@
 
     using DesktopApplicationLauncher.Wpf.Commands;
     using DesktopApplicationLauncher.Wpf.Infrastructure.Business;
+    using DesktopApplicationLauncher.Wpf.Infrastructure.Entities;
     using DesktopApplicationLauncher.Wpf.Infrastructure.Models;
 
     using Microsoft.Win32;
@@ -79,6 +80,8 @@
 
         public ICommand SwapAppsCommand { get; }
 
+        public ICommand ConvertToFolderCommand { get; set; }
+
         public MainViewModel(Window ownerWindow, IApplicationService applicationService)
         {
             _ownerWindow = ownerWindow ?? throw new ArgumentNullException(nameof(ownerWindow));
@@ -92,8 +95,29 @@
             SaveAppCommand = new RelayCommand(SaveApp, _ => SelectedApp != null);
             CloseAppViewCommand = new RelayCommand(_ => CloseAppView());
             SwapAppsCommand = new RelayCommand(SwapApps);
+            ConvertToFolderCommand = new RelayCommand(ConvertToFolder, CanConvertToFolder);
 
             LoadAllApps();
+        }
+
+        private static bool CanConvertToFolder(object parameter)
+        {
+            if (parameter is ApplicationListItemModel model)
+            {
+                return model.ItemType != ApplicationItemType.Folder;
+            }
+
+            return false;
+        }
+
+        private void ConvertToFolder(object parameter)
+        {
+            if (parameter is ApplicationListItemModel model)
+            { 
+                _applicationService.ConvertToFolder(model.Id, model.Name);
+
+                LoadAllApps();
+            }
         }
 
         private void SwapApps(object parameter)
@@ -153,7 +177,6 @@
                 }
                 catch (Exception exception)
                 {
-                    // Empty
                     MessageBox.Show(_ownerWindow, $"File Open Error!!{Environment.NewLine}{exception.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
