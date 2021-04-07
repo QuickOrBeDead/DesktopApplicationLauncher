@@ -5,7 +5,6 @@
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using System.Linq;
     using System.Windows;
     using System.Windows.Input;
 
@@ -22,13 +21,38 @@
 
         private readonly IApplicationService _applicationService;
 
+        private ObservableCollection<ApplicationListItemModel> _apps;
+
         [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Reviewed")]
         public ObservableCollection<ApplicationListItemModel> Apps
         {
             get => _apps;
             set
             {
+                if (ReferenceEquals(_apps, value))
+                {
+                    return;
+                }
+
                 _apps = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<ParentFolderModel> _folders;
+
+        [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Reviewed")]
+        public ObservableCollection<ParentFolderModel> Folders
+        {
+            get => _folders;
+            set
+            {
+                if (ReferenceEquals(_folders, value))
+                {
+                    return;
+                }
+
+                _folders = value;
                 OnPropertyChanged();
             }
         }
@@ -52,8 +76,6 @@
 
         private int _appViewWidth;
 
-        private ObservableCollection<ApplicationListItemModel> _apps;
-
         public int AppViewWidth
         {
             get => _appViewWidth;
@@ -63,6 +85,8 @@
                 OnPropertyChanged();
             }
         }
+
+        public int? ParentId { get; set; }
 
         public ICommand DeleteSelectedAppCommand { get; }
 
@@ -80,7 +104,9 @@
 
         public ICommand SwapAppsCommand { get; }
 
-        public ICommand ConvertToFolderCommand { get; set; }
+        public ICommand ConvertToFolderCommand { get; }
+
+        public ICommand FolderChangeCommand { get; }
 
         public MainViewModel(Window ownerWindow, IApplicationService applicationService)
         {
@@ -90,14 +116,24 @@
             AddAppCommand = new RelayCommand(AddApp);
             OpenAppCommand = new RelayCommand(OpenApp);
             DeleteAppCommand = new RelayCommand(DeleteApp);
-            DeleteSelectedAppCommand = new RelayCommand(DeleteApp, _ => SelectedApp != null && SelectedApp.Id > 0);
+            DeleteSelectedAppCommand = new RelayCommand(DeleteApp, _ => SelectedApp?.Id > 0);
             AddAppPathCommand = new RelayCommand(AddAppPath, _ => SelectedApp != null);
             SaveAppCommand = new RelayCommand(SaveApp, _ => SelectedApp != null);
             CloseAppViewCommand = new RelayCommand(_ => CloseAppView());
             SwapAppsCommand = new RelayCommand(SwapApps);
             ConvertToFolderCommand = new RelayCommand(ConvertToFolder, CanConvertToFolder);
+            FolderChangeCommand = new RelayCommand(ChangeFolder);
 
             LoadAllApps();
+        }
+
+        private void ChangeFolder(object parameter)
+        {
+            if (parameter is ParentFolderModel model)
+            {
+                ParentId = model.Id == 0 ? null : model.Id;
+                LoadAllApps();
+            }
         }
 
         private static bool CanConvertToFolder(object parameter)
@@ -113,7 +149,7 @@
         private void ConvertToFolder(object parameter)
         {
             if (parameter is ApplicationListItemModel model)
-            { 
+            {
                 _applicationService.ConvertToFolder(model.Id, model.Name);
 
                 LoadAllApps();
@@ -122,8 +158,38 @@
 
         private void SwapApps(object parameter)
         {
-            (int startIndex, int endIndex) = ((int, int))parameter;
+            (int sourceIndex, int targetIndex) = ((int, int))parameter;
 
+            var target = Apps[targetIndex];
+            if (target.ItemType == ApplicationItemType.Folder)
+            {
+                MessageBox.Show("Target is Folder");
+                return;
+            }
+
+            Apps[targetIndex] = Apps[sourceIndex];
+
+            if (sourceIndex < targetIndex)
+            {
+                for (var i = targetIndex - 1; i >= sourceIndex; i--)
+                {
+                    var next = Apps[i];
+                    Apps[i] = target;
+                    target = next;
+                }
+            }
+            else
+            {
+                for (var i = targetIndex + 1; i <= sourceIndex; i++)
+                {
+                    var next = Apps[i];
+                    Apps[i] = target;
+                    target = next;
+                }
+            }
+
+            int startIndex = Math.Min(sourceIndex, targetIndex);
+            int endIndex = Math.Max(sourceIndex, targetIndex);
             for (var i = startIndex; i <= endIndex; i++)
             {
                 var item = Apps[i];
@@ -164,20 +230,28 @@
         {
             if (parameter is ApplicationListItemModel appItem)
             {
-                try
+                if (appItem.ItemType == ApplicationItemType.Folder)
                 {
-                    Process.Start(new ProcessStartInfo(appItem.Path)
-                                      {
-                                          Arguments = appItem.Arguments,
-                                          UseShellExecute = true,
-                                          WorkingDirectory = Path.GetDirectoryName(appItem.Path)!
-                                      });
-
-                    appItem.LastAccessedDate = _applicationService.UpdateApplicationLastAccessDate(appItem.Id);
+                    ParentId = appItem.Id;
+                    LoadAllApps();
                 }
-                catch (Exception exception)
+                else
                 {
-                    MessageBox.Show(_ownerWindow, $"File Open Error!!{Environment.NewLine}{exception.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    try
+                    {
+                        Process.Start(new ProcessStartInfo(appItem.Path)
+                                          {
+                                              Arguments = appItem.Arguments,
+                                              UseShellExecute = true,
+                                              WorkingDirectory = Path.GetDirectoryName(appItem.Path)!
+                                          });
+
+                        appItem.LastAccessedDate = _applicationService.UpdateApplicationLastAccessDate(appItem.Id);
+                    }
+                    catch (Exception exception)
+                    {
+                        MessageBox.Show(_ownerWindow, $"File Open Error!!{Environment.NewLine}{exception.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }
@@ -185,26 +259,14 @@
         private void SaveAppToDb()
         {
             var selectedApp = SelectedApp;
-            if (selectedApp.Id > 0)
-            {
-                _applicationService.UpdateApplication(new ApplicationUpdateModel
-                                                       {
-                                                           Id = selectedApp.Id,
-                                                           Name = selectedApp.Name,
-                                                           Arguments = selectedApp.Arguments,
-                                                           Path = selectedApp.Path
-                                                       });
-            }
-            else
-            {
-                _applicationService.AddApplication(new ApplicationAddModel
-                                                       {
-                                                           Name = selectedApp.Name,
-                                                           Arguments = selectedApp.Arguments,
-                                                           Path = selectedApp.Path,
-                                                           SortOrder = Apps.Select(x => x.SortOrder).DefaultIfEmpty().Max() + 1
-                                                       });
-            }
+            _applicationService.SaveApplication(new ApplicationSaveModel
+                                                    {
+                                                        Id = selectedApp.Id,
+                                                        ParentId = ParentId,
+                                                        Name = selectedApp.Name,
+                                                        Arguments = selectedApp.Arguments,
+                                                        Path = selectedApp.Path
+                                                    });
         }
 
         private void CloseAppView()
@@ -214,7 +276,8 @@
 
         private void LoadAllApps()
         {
-            Apps = new ObservableCollection<ApplicationListItemModel>(_applicationService.ListAllApplications());
+            Apps = new ObservableCollection<ApplicationListItemModel>(_applicationService.ListAllApplications(ParentId));
+            Folders = new ObservableCollection<ParentFolderModel>(_applicationService.GetParentFolders(ParentId));
         }
 
         private ApplicationListItemModel CreateAddApp()

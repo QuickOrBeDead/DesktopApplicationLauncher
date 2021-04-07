@@ -21,5 +21,7 @@
         public DateTime? LastAccessedDate { get; set; }
 
         public DateTime CreateDate { get; set; }
+
+        public string HierarchyPath { get; set; }
     }
 }

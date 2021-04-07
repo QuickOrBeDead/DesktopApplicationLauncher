@@ -13,12 +13,17 @@
 
         void UpdateApplication(ApplicationUpdateModel updateModel);
 
+        void SaveApplication(ApplicationSaveModel saveModel);
+
         void UpdateApplicationOrder(int id, int sortOrder);
+
 
         void DeleteApp(int id);
 
         DateTime UpdateApplicationLastAccessDate(int id);
 
         void ConvertToFolder(int id, string folderName = null);
+
+        IList<ParentFolderModel> GetParentFolders(int? id);
     }
 }

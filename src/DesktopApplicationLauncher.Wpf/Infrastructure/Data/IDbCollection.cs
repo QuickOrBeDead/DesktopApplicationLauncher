@@ -30,5 +30,13 @@
         void Delete(object id);
 
         bool ExistsById(object id);
+
+        IList<TEntity> GetByIds(object[] ids);
+
+        TKey Max<TKey>(Expression<Func<TEntity, TKey>> selectExpression, Expression<Func<TEntity, bool>> filter = null)
+            where TKey : struct;
+
+        TKey Min<TKey>(Expression<Func<TEntity, TKey>> selectExpression, Expression<Func<TEntity, bool>> filter = null)
+            where TKey : struct;
     }
 }

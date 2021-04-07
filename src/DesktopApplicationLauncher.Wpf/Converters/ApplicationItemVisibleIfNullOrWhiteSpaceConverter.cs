@@ -4,6 +4,7 @@
     using System.Globalization;
     using System.Windows.Data;
 
+    using DesktopApplicationLauncher.Wpf.Infrastructure.Entities;
     using DesktopApplicationLauncher.Wpf.Infrastructure.Models;
 
     public sealed class ApplicationItemVisibleIfNullOrWhiteSpaceConverter : IValueConverter
@@ -12,6 +13,11 @@
         {
             if (value is ApplicationListItemModel applicationItem)
             {
+                if (applicationItem.ItemType == ApplicationItemType.Folder)
+                {
+                    return !string.IsNullOrWhiteSpace(applicationItem.Name);
+                }
+
                 return !string.IsNullOrWhiteSpace(applicationItem.Name)
                        && !string.IsNullOrWhiteSpace(applicationItem.Path);
             }

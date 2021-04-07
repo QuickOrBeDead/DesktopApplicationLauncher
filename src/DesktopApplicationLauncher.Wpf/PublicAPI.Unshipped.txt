@@ -6,6 +6,13 @@ DesktopApplicationLauncher.Wpf.Commands.RelayCommand.CanExecute(object parameter
 DesktopApplicationLauncher.Wpf.Commands.RelayCommand.CanExecuteChanged -> System.EventHandler
 DesktopApplicationLauncher.Wpf.Commands.RelayCommand.Execute(object parameter) -> void
 DesktopApplicationLauncher.Wpf.Commands.RelayCommand.RelayCommand(System.Action<object> executeAction, System.Func<object, bool> canExecuteFunc = null) -> void
+DesktopApplicationLauncher.Wpf.Controls.BreadCrumb
+DesktopApplicationLauncher.Wpf.Controls.BreadCrumb.BreadCrumb() -> void
+DesktopApplicationLauncher.Wpf.Controls.BreadCrumb.Command.get -> System.Windows.Input.ICommand
+DesktopApplicationLauncher.Wpf.Controls.BreadCrumb.Command.set -> void
+DesktopApplicationLauncher.Wpf.Controls.BreadCrumb.InitializeComponent() -> void
+DesktopApplicationLauncher.Wpf.Controls.BreadCrumb.Items.get -> System.Collections.IEnumerable
+DesktopApplicationLauncher.Wpf.Controls.BreadCrumb.Items.set -> void
 DesktopApplicationLauncher.Wpf.Controls.DraggableBorder
 DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.Command.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.Command.set -> void
@@ -21,6 +28,9 @@ DesktopApplicationLauncher.Wpf.Controls.DragPanel
 DesktopApplicationLauncher.Wpf.Controls.DragPanel.DragPanel() -> void
 DesktopApplicationLauncher.Wpf.Controls.DragPanel.ItemsSwapped.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.Controls.DragPanel.ItemsSwapped.set -> void
+DesktopApplicationLauncher.Wpf.Controls.IHasParent
+DesktopApplicationLauncher.Wpf.Controls.IHasParent.Parent.get -> DesktopApplicationLauncher.Wpf.Controls.IHasParent
+DesktopApplicationLauncher.Wpf.Controls.IHasParent.Parent.set -> void
 DesktopApplicationLauncher.Wpf.Converters.ApplicationItemVisibleIfNullOrWhiteSpaceConverter
 DesktopApplicationLauncher.Wpf.Converters.ApplicationItemVisibleIfNullOrWhiteSpaceConverter.ApplicationItemVisibleIfNullOrWhiteSpaceConverter() -> void
 DesktopApplicationLauncher.Wpf.Converters.ApplicationItemVisibleIfNullOrWhiteSpaceConverter.Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) -> object
@@ -48,14 +58,18 @@ DesktopApplicationLauncher.Wpf.Converters.VisibleIfNotNullConverter.VisibleIfNot
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.AddApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel addModel) -> int
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.ApplicationService(DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbContext dbContext) -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.ConvertToFolder(int id, string folderName = null) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.DeleteApp(int id) -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.GetParentFolders(int id) -> System.Collections.Generic.IList<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ParentFolderModel>
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.ListAllApplications(int? parentId = null) -> System.Collections.Generic.IList<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel>
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel updateModel) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplicationLastAccessDate(int id) -> System.DateTime
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.ApplicationService.UpdateApplicationOrder(int id, int sortOrder) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.AddApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationAddModel addModel) -> int
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.ConvertToFolder(int id, string folderName = null) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.DeleteApp(int id) -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.GetParentFolders(int id) -> System.Collections.Generic.IList<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ParentFolderModel>
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.ListAllApplications(int? parentId = null) -> System.Collections.Generic.IList<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel>
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.UpdateApplication(DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel updateModel) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService.UpdateApplicationLastAccessDate(int id) -> System.DateTime
@@ -64,6 +78,7 @@ DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>.Delete(object id) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>.ExistsById(object id) -> bool
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>.GetById(object id) -> TEntity
+DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>.GetByIds(object[] ids) -> System.Collections.Generic.IList<TEntity>
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>.Insert(TEntity entity) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>.List(System.Linq.Expressions.Expression<System.Func<TEntity, bool>> filter = null, System.Linq.Expressions.Expression<System.Func<TEntity, object>> orderBy = null, bool ascending = true) -> System.Collections.Generic.IList<TEntity>
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.IDbCollection<TEntity>.ListDto<TDto>(System.Linq.Expressions.Expression<System.Func<TEntity, TDto>> selectExpression, System.Linq.Expressions.Expression<System.Func<TEntity, bool>> filter = null, System.Linq.Expressions.Expression<System.Func<TEntity, object>> orderBy = null, bool ascending = true) -> System.Collections.Generic.IList<TDto>
@@ -75,6 +90,7 @@ DesktopApplicationLauncher.Wpf.Infrastructure.Data.LiteDbCollection<TEntity>
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.LiteDbCollection<TEntity>.Delete(object id) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.LiteDbCollection<TEntity>.ExistsById(object id) -> bool
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.LiteDbCollection<TEntity>.GetById(object id) -> TEntity
+DesktopApplicationLauncher.Wpf.Infrastructure.Data.LiteDbCollection<TEntity>.GetByIds(object[] ids) -> System.Collections.Generic.IList<TEntity>
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.LiteDbCollection<TEntity>.Insert(TEntity entity) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.LiteDbCollection<TEntity>.List(System.Linq.Expressions.Expression<System.Func<TEntity, bool>> filter = null, System.Linq.Expressions.Expression<System.Func<TEntity, object>> orderBy = null, bool ascending = true) -> System.Collections.Generic.IList<TEntity>
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.LiteDbCollection<TEntity>.ListDto<TDto>(System.Linq.Expressions.Expression<System.Func<TEntity, TDto>> selectExpression, System.Linq.Expressions.Expression<System.Func<TEntity, bool>> filter = null, System.Linq.Expressions.Expression<System.Func<TEntity, object>> orderBy = null, bool ascending = true) -> System.Collections.Generic.IList<TDto>
@@ -87,7 +103,9 @@ DesktopApplicationLauncher.Wpf.Infrastructure.Data.LiteDbContext.Dispose() -> vo
 DesktopApplicationLauncher.Wpf.Infrastructure.Data.LiteDbContext.LiteDbContext(string connectionString) -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.Application() -> void
-DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.ItemType.get -> DesktopApplicationLauncher.Wpf.Infrastructure.Entities.ApplicationItemType
+DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.HierarchyPath.get -> string
+DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.HierarchyPath.set -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.ItemType.get -> DesktopApplicationLauncher.Wpf.Infrastructure.Entities.ApplicationItemType?
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.ItemType.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.Arguments.get -> string
 DesktopApplicationLauncher.Wpf.Infrastructure.Entities.Application.Arguments.set -> void
@@ -131,6 +149,8 @@ DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.Cr
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.CreateDate.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.Id.get -> int
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.Id.set -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.ItemType.get -> DesktopApplicationLauncher.Wpf.Infrastructure.Entities.ApplicationItemType
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.ItemType.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.LastAccessedDate.get -> System.DateTime?
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.LastAccessedDate.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel.Name.get -> string
@@ -152,6 +172,12 @@ DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.Pare
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.ParentId.set -> void
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.Path.get -> string
 DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationUpdateModel.Path.set -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ParentFolderModel
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ParentFolderModel.Id.get -> int
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ParentFolderModel.Id.set -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ParentFolderModel.Name.get -> string
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ParentFolderModel.Name.set -> void
+DesktopApplicationLauncher.Wpf.Infrastructure.Models.ParentFolderModel.ParentFolderModel() -> void
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.AddAppCommand.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.AddAppPathCommand.get -> System.Windows.Input.ICommand
@@ -160,10 +186,16 @@ DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.Apps.set -> void
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.AppViewWidth.get -> int
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.AppViewWidth.set -> void
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.CloseAppViewCommand.get -> System.Windows.Input.ICommand
+DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.ConvertToFolderCommand.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.DeleteAppCommand.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.DeleteSelectedAppCommand.get -> System.Windows.Input.ICommand
+DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.FolderChangeCommand.get -> System.Windows.Input.ICommand
+DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.Folders.get -> System.Collections.ObjectModel.ObservableCollection<DesktopApplicationLauncher.Wpf.Infrastructure.Models.ParentFolderModel>
+DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.Folders.set -> void
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.MainViewModel(System.Windows.Window ownerWindow, DesktopApplicationLauncher.Wpf.Infrastructure.Business.IApplicationService applicationService) -> void
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.OpenAppCommand.get -> System.Windows.Input.ICommand
+DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.ParentId.get -> int?
+DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.ParentId.set -> void
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.SaveAppCommand.get -> System.Windows.Input.ICommand
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.SelectedApp.get -> DesktopApplicationLauncher.Wpf.Infrastructure.Models.ApplicationListItemModel
 DesktopApplicationLauncher.Wpf.ViewModels.MainViewModel.SelectedApp.set -> void
@@ -176,7 +208,10 @@ DesktopApplicationLauncher.Wpf.Views.MainWindow.InitializeComponent() -> void
 DesktopApplicationLauncher.Wpf.Views.MainWindow.MainWindow() -> void
 override DesktopApplicationLauncher.Wpf.App.OnExit(System.Windows.ExitEventArgs e) -> void
 override DesktopApplicationLauncher.Wpf.App.OnStartup(System.Windows.StartupEventArgs e) -> void
+override DesktopApplicationLauncher.Wpf.Infrastructure.Models.ParentFolderModel.ToString() -> string
 static DesktopApplicationLauncher.Wpf.App.Main() -> void
+static readonly DesktopApplicationLauncher.Wpf.Controls.BreadCrumb.CommandProperty -> System.Windows.DependencyProperty
+static readonly DesktopApplicationLauncher.Wpf.Controls.BreadCrumb.ItemsProperty -> System.Windows.DependencyProperty
 static readonly DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.CommandParameterProperty -> System.Windows.DependencyProperty
 static readonly DesktopApplicationLauncher.Wpf.Controls.DraggableBorder.CommandProperty -> System.Windows.DependencyProperty
 static readonly DesktopApplicationLauncher.Wpf.Controls.DragPanel.ItemsSwappedProperty -> System.Windows.DependencyProperty

@@ -1,11 +1,11 @@
 ﻿namespace DesktopApplicationLauncher.Wpf.Controls
 {
     using System;
-    using System.Collections;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
+    using System.Windows.Media;
 
     using MahApps.Metro.Controls;
 
@@ -44,10 +44,37 @@
                                     var draggableBorder = ((ContentPresenter)cp).FindChild<DraggableBorder>();
                                     draggableBorder.Index = index;
                                     draggableBorder.StopMove += DraggableBorder_StopMove;
+                                    draggableBorder.Move += DraggableBorder_Move;
                                 };
                         }
                     };
             }
+        }
+
+        private void DraggableBorder_Move(object sender, EventArgs e)
+        {
+            var draggableBorder = (DraggableBorder)sender;
+            ForEachItems(
+                item =>
+                    {
+                        if (ReferenceEquals(draggableBorder, item))
+                        {
+                            return;
+                        }
+
+                        var relativeLocation = item.TranslatePoint(new Point(0, 0), draggableBorder);
+                        if (Math.Abs(relativeLocation.X) < 25 && Math.Abs(relativeLocation.Y) < 25)
+                        {
+                            var solidColorBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#c2cef6");
+                            solidColorBrush.Opacity = 0.3;
+
+                            item.Background = solidColorBrush;
+                        }
+                        else
+                        {
+                            item.Background = Brushes.Transparent;
+                        }
+                    });
         }
 
         private void DraggableBorder_StopMove(object sender, EventArgs e)
@@ -69,15 +96,9 @@
                         var relativeLocation = item.TranslatePoint(new Point(0, 0), draggableBorder);
                         if (Math.Abs(relativeLocation.X) < 25 && Math.Abs(relativeLocation.Y) < 25)
                         {
-                            var itemsControl = GetItemsControl();
-                            if (itemsControl != null)
-                            {
-                                var list = (IList)itemsControl.ItemsSource;
+                            ItemsSwapped?.Execute((draggableBorder.Index, item.Index));
 
-                                ReplaceItems(list, draggableBorder.Index, item.Index);
-
-                                SetDraggableItemsIndexes();
-                            }
+                            SetDraggableItemsIndexes();
                         }
                     });
         }
@@ -86,41 +107,6 @@
         {
             var index = 0;
             ForEachItems(draggableBorder => draggableBorder.Index = index++);
-        }
-
-        private void ReplaceItems(IList list, int sourceIndex, int targetIndex)
-        {
-            var target = list[targetIndex];
-            list[targetIndex] = list[sourceIndex];
-
-            if (sourceIndex < targetIndex)
-            {
-                for (var i = targetIndex - 1; i >= sourceIndex; i--)
-                {
-                    var next = list[i];
-                    list[i] = target;
-                    target = next;
-                }
-            }
-            else
-            {
-                for (var i = targetIndex + 1; i <= sourceIndex; i++)
-                {
-                    var next = list[i];
-                    list[i] = target;
-                    target = next;
-                }
-            }
-
-            var itemsSwapped = ItemsSwapped;
-            if (itemsSwapped != null)
-            {
-                var sourceTargetTuple = (Math.Min(sourceIndex, targetIndex), Math.Max(sourceIndex, targetIndex));
-                if (itemsSwapped.CanExecute(sourceTargetTuple))
-                {
-                    itemsSwapped.Execute(sourceTargetTuple);
-                }
-            }
         }
 
         private void ForEachItems(Action<DraggableBorder> action)

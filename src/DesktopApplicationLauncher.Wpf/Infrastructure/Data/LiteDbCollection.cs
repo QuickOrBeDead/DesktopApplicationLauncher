@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using System.Linq.Expressions;
 
     using LiteDB;
@@ -46,9 +47,52 @@
             return query.Select(selectExpression).ToList();
         }
 
+        public TKey Max<TKey>(Expression<Func<TEntity, TKey>> selectExpression, Expression<Func<TEntity, bool>> filter = null)
+            where TKey : struct
+        {
+            var query = Query(filter);
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            return query.OrderByDescending(selectExpression)
+                        .Select(selectExpression)
+                        .FirstOrDefault();
+        }
+
+        public TKey Min<TKey>(Expression<Func<TEntity, TKey>> selectExpression, Expression<Func<TEntity, bool>> filter = null)
+            where TKey : struct
+        {
+            var query = Query(filter);
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            return query.OrderBy(selectExpression)
+                .Select(selectExpression)
+                .FirstOrDefault();
+        }
+
         public TEntity GetById(object id)
         {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
             return _collection.FindOne($"$._id = {id}");
+        }
+
+        public IList<TEntity> GetByIds(object[] ids)
+        {
+            if (ids == null)
+            {
+                throw new ArgumentNullException(nameof(ids));
+            }
+
+            return _collection.Find(LiteDB.Query.In("_id", ids.Cast<BsonValue>())).ToList();
         }
 
         public bool ExistsById(object id)
@@ -76,7 +120,7 @@
             _collection.Delete(new BsonValue(id));
         }
 
-        private ILiteQueryable<TEntity> Query(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, object>> orderBy, bool ascending)
+        private ILiteQueryable<TEntity> Query(Expression<Func<TEntity, bool>> filter = null, Expression<Func<TEntity, object>> orderBy = null, bool ascending = true)
         {
             var query = _collection.Query();
 
