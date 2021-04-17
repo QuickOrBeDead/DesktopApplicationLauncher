@@ -150,7 +150,8 @@
                 </Border>
                 <ScrollViewer DockPanel.Dock="Bottom" Background="#FFF1F1F1">
                     <controls:DragPanel x:Name="DragPanel" 
-                                        ItemsSwapped="{Binding DataContext.SwapAppsCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:MainWindow}}}" 
+                                        SwapItems="{Binding DataContext.SwapAppsCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:MainWindow}}}"
+                                        ItemsMove="{Binding DataContext.AppsMoveCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:MainWindow}}}"
                                         Margin="10 5">
                         <ItemsControl ItemsSource="{Binding Apps}">
                             <ItemsControl.ItemTemplate>
@@ -212,6 +213,20 @@
                                             <Style TargetType="{x:Type Border}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource Self}}" Value="True">
+                                                        <Setter Property="RenderTransform">
+                                                            <Setter.Value>
+                                                                <ScaleTransform ScaleX="1.025" ScaleY="1.025"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Setter Property="Background">
+                                                            <Setter.Value>
+                                                                <SolidColorBrush Color="#c2cef6"  Opacity="0.3" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                        <Setter Property="BorderBrush" Value="Gainsboro"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
                                                         <Setter Property="RenderTransform">
                                                             <Setter.Value>
                                                                 <ScaleTransform ScaleX="1.025" ScaleY="1.025"/>

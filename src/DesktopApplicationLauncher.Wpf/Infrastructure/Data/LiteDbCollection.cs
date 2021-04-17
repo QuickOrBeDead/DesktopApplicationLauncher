@@ -120,6 +120,16 @@
             _collection.Delete(new BsonValue(id));
         }
 
+        public bool EnsureIndex<TKey>(Expression<Func<TEntity, TKey>> keySelector, bool unique = false)
+        {
+            return _collection.EnsureIndex(keySelector, unique);
+        }
+
+        public bool EnsureIndex<TKey>(string name, Expression<Func<TEntity, TKey>> keySelector, bool unique = false)
+        {
+            return _collection.EnsureIndex(name, keySelector, unique);
+        }
+
         private ILiteQueryable<TEntity> Query(Expression<Func<TEntity, bool>> filter = null, Expression<Func<TEntity, object>> orderBy = null, bool ascending = true)
         {
             var query = _collection.Query();

@@ -4,6 +4,7 @@
     using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Documents;
     using System.Windows.Input;
     using System.Windows.Media;
 
@@ -20,6 +21,11 @@
         public static readonly DependencyProperty CommandProperty = DependencyProperty.Register("Command", typeof(ICommand), typeof(DraggableBorder), new PropertyMetadata(null));
 
         public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register("CommandParameter", typeof(object), typeof(DraggableBorder), new PropertyMetadata(null));
+
+        private DraggableBorderSwapItemsAdorner _draggableBorderSwapItemsAdorner;
+        private bool _draggableBorderSwapItemsAdornerAdded;
+
+        private AdornerLayer _draggableBorderSwapItemsAdornerLayer;
 
         [Bindable(true)]
         [Category("Action")]
@@ -50,6 +56,14 @@
             MouseDown += DraggableBorder_MouseDown;
             MouseUp += DraggableBorder_MouseUp;
             MouseMove += DraggableBorder_MouseMove;
+            Loaded += DraggableBorder_Loaded;
+        }
+
+        private void DraggableBorder_Loaded(object sender, RoutedEventArgs e)
+        {
+            var draggableBorder = (DraggableBorder)sender;
+            _draggableBorderSwapItemsAdorner = new DraggableBorderSwapItemsAdorner(draggableBorder);
+            _draggableBorderSwapItemsAdornerLayer = AdornerLayer.GetAdornerLayer(draggableBorder);
         }
 
         private void DraggableBorder_MouseDown(object sender, MouseButtonEventArgs e)
@@ -107,6 +121,27 @@
             ReleaseMouseCapture();
 
             StopMove(this, EventArgs.Empty);
+        }
+
+        public void SetSwapItemsAdorner(DraggableBorderSwapItemsAdornerLocation location)
+        {
+            if (location == DraggableBorderSwapItemsAdornerLocation.None)
+            {
+                if (_draggableBorderSwapItemsAdornerAdded)
+                {
+                    _draggableBorderSwapItemsAdornerLayer.Remove(_draggableBorderSwapItemsAdorner);
+                    _draggableBorderSwapItemsAdornerAdded = false;
+                }
+            }
+            else
+            {
+                if (!_draggableBorderSwapItemsAdornerAdded)
+                {
+                    _draggableBorderSwapItemsAdorner.Location = location;
+                    _draggableBorderSwapItemsAdornerLayer.Add(_draggableBorderSwapItemsAdorner);
+                    _draggableBorderSwapItemsAdornerAdded = true;
+                }
+            }
         }
 
         private void DraggableBorder_MouseMove(object sender, MouseEventArgs e)

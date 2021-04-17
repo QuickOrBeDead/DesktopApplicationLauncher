@@ -14,10 +14,16 @@
         private bool _disposed;
 
         public LiteDbContext(string connectionString)
+            : this(new LiteDatabase(connectionString))
         {
-            _database = new LiteDatabase(connectionString);
+        }
+
+        public LiteDbContext(ILiteDatabase liteDatabase)
+        {
+            _database = liteDatabase ?? throw new ArgumentNullException(nameof(liteDatabase));
 
             Applications = new LiteDbCollection<Application>(_database);
+            Applications.EnsureIndex(x => x.HierarchyPath);
         }
 
         ~LiteDbContext()

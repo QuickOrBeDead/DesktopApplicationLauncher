@@ -13,10 +13,9 @@
 
         void UpdateApplication(ApplicationUpdateModel updateModel);
 
-        void SaveApplication(ApplicationSaveModel saveModel);
+        int SaveApplication(ApplicationSaveModel saveModel);
 
         void UpdateApplicationOrder(int id, int sortOrder);
-
 
         void DeleteApp(int id);
 
@@ -25,5 +24,7 @@
         void ConvertToFolder(int id, string folderName = null);
 
         IList<ParentFolderModel> GetParentFolders(int? id);
+
+        void MoveToFolder(int sourceId, int targetId);
     }
 }

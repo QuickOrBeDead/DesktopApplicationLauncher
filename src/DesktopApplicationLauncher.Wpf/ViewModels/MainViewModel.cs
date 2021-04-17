@@ -108,6 +108,8 @@
 
         public ICommand FolderChangeCommand { get; }
 
+        public ICommand AppsMoveCommand { get; }
+
         public MainViewModel(Window ownerWindow, IApplicationService applicationService)
         {
             _ownerWindow = ownerWindow ?? throw new ArgumentNullException(nameof(ownerWindow));
@@ -121,10 +123,26 @@
             SaveAppCommand = new RelayCommand(SaveApp, _ => SelectedApp != null);
             CloseAppViewCommand = new RelayCommand(_ => CloseAppView());
             SwapAppsCommand = new RelayCommand(SwapApps);
+            AppsMoveCommand = new RelayCommand(AppsMove);
             ConvertToFolderCommand = new RelayCommand(ConvertToFolder, CanConvertToFolder);
             FolderChangeCommand = new RelayCommand(ChangeFolder);
 
             LoadAllApps();
+        }
+
+        private void AppsMove(object parameter)
+        {
+            var (sourceIndex, targetIndex, itemIsOver, isStopped) = ((int, int, bool, bool))parameter;
+
+            var target = Apps[targetIndex];
+            target.IsHighlighted = target.ItemType == ApplicationItemType.Folder && itemIsOver && !isStopped;
+
+            if (isStopped && itemIsOver && target.ItemType == ApplicationItemType.Folder)
+            {
+                _applicationService.MoveToFolder(Apps[sourceIndex].Id, target.Id);
+
+                LoadAllApps();
+            }
         }
 
         private void ChangeFolder(object parameter)
@@ -158,14 +176,9 @@
 
         private void SwapApps(object parameter)
         {
-            (int sourceIndex, int targetIndex) = ((int, int))parameter;
+            var (sourceIndex, targetIndex) = ((int, int))parameter;
 
             var target = Apps[targetIndex];
-            if (target.ItemType == ApplicationItemType.Folder)
-            {
-                MessageBox.Show("Target is Folder");
-                return;
-            }
 
             Apps[targetIndex] = Apps[sourceIndex];
 
@@ -230,6 +243,8 @@
         {
             if (parameter is ApplicationListItemModel appItem)
             {
+                appItem.LastAccessedDate = _applicationService.UpdateApplicationLastAccessDate(appItem.Id);
+
                 if (appItem.ItemType == ApplicationItemType.Folder)
                 {
                     ParentId = appItem.Id;
@@ -245,8 +260,6 @@
                                               UseShellExecute = true,
                                               WorkingDirectory = Path.GetDirectoryName(appItem.Path)!
                                           });
-
-                        appItem.LastAccessedDate = _applicationService.UpdateApplicationLastAccessDate(appItem.Id);
                     }
                     catch (Exception exception)
                     {

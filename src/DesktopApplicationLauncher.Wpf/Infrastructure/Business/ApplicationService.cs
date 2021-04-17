@@ -60,7 +60,7 @@
                          {
                              ParentId = updateModel.ParentId,
                              Name = updateModel.Name,
-                             Path = updateModel.Path, 
+                             Path = updateModel.Path,
                              Arguments = updateModel.Arguments
                          },
                 x => x.Id == updateModel.Id);
@@ -95,7 +95,7 @@
 
             var folder = AddApplicationInternal(new ApplicationAddModel
                                                       {
-                                                          Name = folderName ?? application.Name, 
+                                                          Name = folderName ?? application.Name,
                                                           ItemType = ApplicationItemType.Folder,
                                                           ParentId = application.ParentId,
                                                           SortOrder = application.SortOrder
@@ -117,7 +117,6 @@
             }
 
             var folder = _dbContext.Applications.ListDto(x => new { x.HierarchyPath, x.Name, x.ParentId }, x => x.Id == id).FirstOrDefault();
-           
             if (folder == null)
             {
                 return result;
@@ -148,6 +147,40 @@
             result.Add(new ParentFolderModel { Name = folder.Name });
 
             return result;
+        }
+
+        public void MoveToFolder(int sourceId, int targetId)
+        {
+            var target = _dbContext.Applications.GetById(targetId);
+            if (target.ItemType != ApplicationItemType.Folder)
+            {
+                return;
+            }
+
+            var source = _dbContext.Applications.GetById(sourceId);
+
+            var targetHierarchyPath = CreateHierarchyPath(target);
+            _dbContext.Applications.Update(
+                _ => new Application
+                         {
+                             ParentId = target.Id,
+                             SortOrder = GetMaxSortOrder(target.Id) + 1,
+                             HierarchyPath = targetHierarchyPath
+                         },
+                x => x.Id == sourceId);
+
+            if (source.ItemType == ApplicationItemType.Folder)
+            {
+                var oldHierarchyPath = CreateHierarchyPath(source);
+                var newHierarchyPath = $"{targetHierarchyPath}{sourceId}/";
+
+                _dbContext.Applications.Update(
+                    x => new Application
+                             {
+                                 HierarchyPath = x.HierarchyPath.Replace(oldHierarchyPath, newHierarchyPath)
+                             },
+                    x => x.HierarchyPath.StartsWith(oldHierarchyPath));
+            }
         }
 
         private Application AddApplicationInternal(ApplicationAddModel addModel)
@@ -184,10 +217,10 @@
 
         private static string CreateHierarchyPath(Application parent)
         {
-            return string.IsNullOrWhiteSpace(parent.HierarchyPath) ? parent.Id.ToString(CultureInfo.InvariantCulture) : $"{parent.HierarchyPath}/{parent.Id}";
+            return string.IsNullOrWhiteSpace(parent.HierarchyPath) ? $"/{parent.Id.ToString(CultureInfo.InvariantCulture)}/" : $"{parent.HierarchyPath}{parent.Id}/";
         }
 
-        public void SaveApplication(ApplicationSaveModel saveModel)
+        public int SaveApplication(ApplicationSaveModel saveModel)
         {
             if (saveModel.Id > 0)
             {
@@ -198,18 +231,24 @@
                                                               Arguments = saveModel.Arguments,
                                                               Path = saveModel.Path
                                                           });
+
+                return saveModel.Id;
             }
-            else
-            {
-                AddApplication(new ApplicationAddModel
-                                                       {
-                                                           ParentId = saveModel.ParentId,
-                                                           Name = saveModel.Name,
-                                                           Arguments = saveModel.Arguments,
-                                                           Path = saveModel.Path,
-                                                           SortOrder = _dbContext.Applications.Max(x => x.SortOrder, x => x.ParentId == saveModel.ParentId) + 1
-                                                       });
-            }
+
+            return AddApplication(new ApplicationAddModel
+                                      {
+                                          ParentId = saveModel.ParentId,
+                                          ItemType = saveModel.ItemType,
+                                          Name = saveModel.Name,
+                                          Arguments = saveModel.Arguments,
+                                          Path = saveModel.Path,
+                                          SortOrder = GetMaxSortOrder(saveModel.ParentId) + 1
+                                      });
+        }
+
+        private int GetMaxSortOrder(int? parentId)
+        {
+            return _dbContext.Applications.Max(x => x.SortOrder, x => x.ParentId == parentId);
         }
     }
 }

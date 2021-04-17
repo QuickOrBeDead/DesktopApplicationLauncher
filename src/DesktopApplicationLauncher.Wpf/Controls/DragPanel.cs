@@ -5,18 +5,24 @@
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
-    using System.Windows.Media;
 
     using MahApps.Metro.Controls;
 
     public sealed class DragPanel : StackPanel
     {
-        public static readonly DependencyProperty ItemsSwappedProperty = DependencyProperty.Register("ItemsSwapped", typeof(ICommand), typeof(DragPanel), new PropertyMetadata(null));
+        public static readonly DependencyProperty SwapItemsProperty = DependencyProperty.Register("SwapItems", typeof(ICommand), typeof(DragPanel), new PropertyMetadata(null));
+        public static readonly DependencyProperty ItemsMoveProperty = DependencyProperty.Register("ItemsMove", typeof(ICommand), typeof(DragPanel), new PropertyMetadata(null));
 
-        public ICommand ItemsSwapped
+        public ICommand SwapItems
         {
-            get => (ICommand)GetValue(ItemsSwappedProperty);
-            set => SetValue(ItemsSwappedProperty, value);
+            get => (ICommand)GetValue(SwapItemsProperty);
+            set => SetValue(SwapItemsProperty, value);
+        }
+
+        public ICommand ItemsMove
+        {
+            get => (ICommand)GetValue(ItemsMoveProperty);
+            set => SetValue(ItemsMoveProperty, value);
         }
 
         protected override void OnInitialized(EventArgs e)
@@ -53,54 +59,77 @@
 
         private void DraggableBorder_Move(object sender, EventArgs e)
         {
-            var draggableBorder = (DraggableBorder)sender;
+            var source = (DraggableBorder)sender;
             ForEachItems(
-                item =>
+                target =>
                     {
-                        if (ReferenceEquals(draggableBorder, item))
+                        if (ReferenceEquals(source, target))
                         {
                             return;
                         }
 
-                        var relativeLocation = item.TranslatePoint(new Point(0, 0), draggableBorder);
-                        if (Math.Abs(relativeLocation.X) < 25 && Math.Abs(relativeLocation.Y) < 25)
-                        {
-                            var solidColorBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#c2cef6");
-                            solidColorBrush.Opacity = 0.3;
+                        var itemIsOver = CheckItemIsOver(source, target);
+                        ItemsMove?.Execute((source.Index, target.Index, itemIsOver, false));
 
-                            item.Background = solidColorBrush;
-                        }
-                        else
-                        {
-                            item.Background = Brushes.Transparent;
-                        }
+                        target.SetSwapItemsAdorner(GetItemsSwapAdornerLocation(source, target));
                     });
         }
 
         private void DraggableBorder_StopMove(object sender, EventArgs e)
         {
-            SwapItemsOnCollision(sender);
-        }
-
-        private void SwapItemsOnCollision(object sender)
-        {
-            var draggableBorder = (DraggableBorder)sender;
+            var source = (DraggableBorder)sender;
             ForEachItems(
-                item =>
+                target =>
                     {
-                        if (ReferenceEquals(draggableBorder, item))
+                        if (source == null || target == null)
                         {
                             return;
                         }
 
-                        var relativeLocation = item.TranslatePoint(new Point(0, 0), draggableBorder);
-                        if (Math.Abs(relativeLocation.X) < 25 && Math.Abs(relativeLocation.Y) < 25)
+                        target.SetSwapItemsAdorner(DraggableBorderSwapItemsAdornerLocation.None);
+
+                        if (ReferenceEquals(source, target))
                         {
-                            ItemsSwapped?.Execute((draggableBorder.Index, item.Index));
+                            return;
+                        }
+
+                        if (CheckItemsSwap(source, target))
+                        {
+                            SwapItems?.Execute((source.Index, target.Index));
 
                             SetDraggableItemsIndexes();
                         }
+
+                        var itemIsOver = CheckItemIsOver(source, target);
+                        ItemsMove?.Execute((source.Index, target.Index, itemIsOver, true));
                     });
+        }
+
+        private static bool CheckItemIsOver(UIElement source, UIElement target)
+        {
+            var relativeLocation = target.TranslatePoint(new Point(0, 0), source);
+            return Math.Abs(relativeLocation.X) < 25 && Math.Abs(relativeLocation.Y) < 25;
+        }
+
+        private static DraggableBorderSwapItemsAdornerLocation GetItemsSwapAdornerLocation(DraggableBorder source, DraggableBorder target)
+        {
+            var itemsSwap = CheckItemsSwap(source, target);
+            var adornerLocation = DraggableBorderSwapItemsAdornerLocation.None;
+            if (itemsSwap)
+            {
+                adornerLocation = source.Index > target.Index ? DraggableBorderSwapItemsAdornerLocation.Left : DraggableBorderSwapItemsAdornerLocation.Right;
+            }
+
+            return adornerLocation;
+        }
+
+        private static bool CheckItemsSwap(DraggableBorder source, DraggableBorder target)
+        {
+            var sourceIndexIsBigger = source.Index > target.Index;
+            var relativeLocation = target.TranslatePoint(new Point(0, 0), source);
+            return ((sourceIndexIsBigger && relativeLocation.X > 25 && relativeLocation.X < 50) ||
+                    (!sourceIndexIsBigger && relativeLocation.X < -25 && relativeLocation.X > -50))
+                        && Math.Abs(relativeLocation.Y) < 25;
         }
 
         private void SetDraggableItemsIndexes()

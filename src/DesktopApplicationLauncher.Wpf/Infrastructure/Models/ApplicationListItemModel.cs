@@ -17,6 +17,8 @@
 
         private ApplicationItemType _itemType;
 
+        private bool _isHighlighted;
+
         public int Id { get; set; }
 
         public string Name
@@ -123,6 +125,22 @@
 
                 OnPropertyChanged();
             }
+        }
+
+        public bool IsHighlighted
+        {
+            get => _isHighlighted;
+            set
+            {
+                if (value.Equals(_isHighlighted))
+                {
+                    return;
+                }
+
+                _isHighlighted = value;
+
+                OnPropertyChanged();
+            } 
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

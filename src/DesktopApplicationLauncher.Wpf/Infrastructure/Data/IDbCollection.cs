@@ -38,5 +38,9 @@
 
         TKey Min<TKey>(Expression<Func<TEntity, TKey>> selectExpression, Expression<Func<TEntity, bool>> filter = null)
             where TKey : struct;
+
+        bool EnsureIndex<TKey>(Expression<Func<TEntity, TKey>> keySelector, bool unique = false);
+
+        bool EnsureIndex<TKey>(string name, Expression<Func<TEntity, TKey>> keySelector, bool unique = false);
     }
 }
