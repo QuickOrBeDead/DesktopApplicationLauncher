@@ -25,6 +25,7 @@
                          {
                              Id = x.Id,
                              Name = x.Name,
+                             Description = x.Description,
                              Path = x.Path,
                              Arguments = x.Arguments,
                              LastAccessedDate = x.LastAccessedDate,
@@ -60,6 +61,7 @@
                          {
                              ParentId = updateModel.ParentId,
                              Name = updateModel.Name,
+                             Description = updateModel.Description,
                              Path = updateModel.Path,
                              Arguments = updateModel.Arguments
                          },
@@ -189,6 +191,7 @@
                                   {
                                       ParentId = addModel.ParentId,
                                       Name = addModel.Name,
+                                      Description = addModel.Description,
                                       ItemType = addModel.ItemType,
                                       Path = addModel.Path,
                                       Arguments = addModel.Arguments,
@@ -228,6 +231,7 @@
                                                           {
                                                               Id = saveModel.Id,
                                                               Name = saveModel.Name,
+                                                              Description = saveModel.Description,
                                                               Arguments = saveModel.Arguments,
                                                               Path = saveModel.Path
                                                           });
@@ -240,6 +244,7 @@
                                           ParentId = saveModel.ParentId,
                                           ItemType = saveModel.ItemType,
                                           Name = saveModel.Name,
+                                          Description = saveModel.Description,
                                           Arguments = saveModel.Arguments,
                                           Path = saveModel.Path,
                                           SortOrder = GetMaxSortOrder(saveModel.ParentId) + 1

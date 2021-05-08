@@ -8,6 +8,8 @@
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         public ApplicationItemType ItemType { get; set; }
 
         public string Path { get; set; }

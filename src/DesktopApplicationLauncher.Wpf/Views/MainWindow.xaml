@@ -88,6 +88,15 @@
                                      FontSize="16"
                                      TextWrapping="Wrap"
                                      Margin="0 0 0 10" />
+                            <TextBox Text="{Binding SelectedApp.Description, UpdateSourceTrigger=PropertyChanged}"
+                                     mah:TextBoxHelper.Watermark="Description"
+                                     mah:TextBoxHelper.UseFloatingWatermark="True"
+                                     FontWeight="Bold"
+                                     FontSize="16"
+                                     TextWrapping="Wrap"
+                                     MinLines="3"
+                                     MaxLines="4"
+                                     Margin="0 0 0 10" />
                             <TextBlock TextWrapping="Wrap">
                                 <Image Width="16"
                                        Height="16" 

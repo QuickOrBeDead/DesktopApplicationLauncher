@@ -19,6 +19,8 @@
 
         private bool _isHighlighted;
 
+        private string _description;
+
         public int Id { get; set; }
 
         public string Name
@@ -62,6 +64,21 @@
                 }
 
                 _arguments = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                if (value == _description)
+                {
+                    return;
+                }
+
+                _description = value;
                 OnPropertyChanged();
             }
         }

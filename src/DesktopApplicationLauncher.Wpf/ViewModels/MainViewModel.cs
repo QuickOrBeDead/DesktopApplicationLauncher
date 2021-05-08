@@ -277,6 +277,7 @@
                                                         Id = selectedApp.Id,
                                                         ParentId = ParentId,
                                                         Name = selectedApp.Name,
+                                                        Description = selectedApp.Description,
                                                         Arguments = selectedApp.Arguments,
                                                         Path = selectedApp.Path
                                                     });
