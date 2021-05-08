@@ -5,12 +5,14 @@
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Input;
 
     using DesktopApplicationLauncher.Wpf.Commands;
     using DesktopApplicationLauncher.Wpf.Infrastructure.Business;
     using DesktopApplicationLauncher.Wpf.Infrastructure.Entities;
+    using DesktopApplicationLauncher.Wpf.Infrastructure.Extensions;
     using DesktopApplicationLauncher.Wpf.Infrastructure.Models;
 
     using Microsoft.Win32;
@@ -57,6 +59,24 @@
             }
         }
 
+        private ObservableCollection<ListItemModel<ApplicationItemType>> _appTypes;
+
+        [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Reviewed")]
+        public ObservableCollection<ListItemModel<ApplicationItemType>> AppTypes
+        {
+            get => _appTypes;
+            set
+            {
+                if (ReferenceEquals(_appTypes, value))
+                {
+                    return;
+                }
+
+                _appTypes = value;
+                OnPropertyChanged();
+            }
+        }
+
         private ApplicationListItemModel _selectedApp;
 
         public ApplicationListItemModel SelectedApp
@@ -71,6 +91,8 @@
 
                 _selectedApp = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsInInsertMode));
+                OnPropertyChanged(nameof(IsFileType));
             }
         }
 
@@ -84,6 +106,16 @@
                 _appViewWidth = value;
                 OnPropertyChanged();
             }
+        }
+
+        public bool IsInInsertMode
+        {
+            get => SelectedApp != null && SelectedApp.Id == 0;
+        }
+
+        public bool IsFileType
+        {
+            get => SelectedApp != null && SelectedApp.ItemType == ApplicationItemType.File;
         }
 
         public int? ParentId { get; set; }
@@ -128,6 +160,8 @@
             FolderChangeCommand = new RelayCommand(ChangeFolder);
 
             LoadAllApps();
+
+            _appTypes = new ObservableCollection<ListItemModel<ApplicationItemType>>(ListItemExtensions.GetListItemsOfEnum<ApplicationItemType>().OrderBy(x => (int)x.Value));
         }
 
         private void AppsMove(object parameter)
@@ -250,6 +284,20 @@
                     ParentId = appItem.Id;
                     LoadAllApps();
                 }
+                else if (appItem.ItemType == ApplicationItemType.Website)
+                {
+                    try
+                    {
+                        Process.Start(new ProcessStartInfo(appItem.Arguments)
+                                          {
+                                              UseShellExecute = true
+                                          });
+                    }
+                    catch (Exception exception)
+                    {
+                        MessageBox.Show(_ownerWindow, $"Website Open Error!!{Environment.NewLine}{exception.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
                 else
                 {
                     try
@@ -277,6 +325,7 @@
                                                         Id = selectedApp.Id,
                                                         ParentId = ParentId,
                                                         Name = selectedApp.Name,
+                                                        ItemType = selectedApp.ItemType,
                                                         Description = selectedApp.Description,
                                                         Arguments = selectedApp.Arguments,
                                                         Path = selectedApp.Path
@@ -297,7 +346,15 @@
         private ApplicationListItemModel CreateAddApp()
         {
             var app = new ApplicationListItemModel { CreateDate = DateTime.Now };
-            app.PropertyChanged += (_, _) => OnPropertyChanged(nameof(SelectedApp));
+            app.PropertyChanged += (_, e) =>
+                {
+                    OnPropertyChanged(nameof(SelectedApp));
+
+                    if (e.PropertyName == nameof(SelectedApp.ItemType))
+                    {
+                        OnPropertyChanged(nameof(IsFileType));
+                    }
+                };
             return app;
         }
 

@@ -11,14 +11,32 @@
     using System.Windows.Interop;
     using System.Windows.Media.Imaging;
 
-    public class FilePathToIconConverter : IValueConverter
+    using DesktopApplicationLauncher.Wpf.Infrastructure.Entities;
+    using DesktopApplicationLauncher.Wpf.Infrastructure.Models;
+
+    using FontAwesome.Sharp;
+
+    using Icon = System.Drawing.Icon;
+
+    public sealed class ApplicationItemToIconConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var filePath = (string)value;
-            using var iconForFile = GetIconForFile(filePath);
+            if (value is ApplicationListItemModel applicationItem)
+            {
+                if (applicationItem.ItemType == ApplicationItemType.Website)
+                {
+                    return IconChar.Chrome.ToImageSource(System.Windows.Media.Brushes.RoyalBlue, 32);
+                }
 
-            return Imaging.CreateBitmapSourceFromHIcon(iconForFile.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                var filePath = applicationItem.Path;
+                using var iconForFile = GetIconForFile(filePath);
+
+                return GetBitmapSource(iconForFile);
+
+            }
+
+            return GetBitmapSource(SystemIcons.WinLogo);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -51,13 +69,21 @@
             return iconForFile;
         }
 
+        private static BitmapSource GetBitmapSource(Icon iconForFile)
+        {
+            return Imaging.CreateBitmapSourceFromHIcon(
+                iconForFile.Handle,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions());
+        }
+
         private static class DefaultIcons
         {
-            private static readonly Lazy<Icon> _lazyFolderIcon = new(FetchIcon, true);
+            private static readonly Lazy<Icon> _lazyFolderIcon = new(FetchFolderIcon, true);
 
             public static Icon FolderLarge => _lazyFolderIcon.Value;
 
-            private static Icon FetchIcon()
+            private static Icon FetchFolderIcon()
             {
                 var tmpDir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())).FullName;
                 var icon = ExtractFromPath(tmpDir);

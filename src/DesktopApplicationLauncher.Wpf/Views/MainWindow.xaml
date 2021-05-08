@@ -21,7 +21,7 @@
         <converters:StringToVisibleIfNotNullOrWhiteSpaceConverter x:Key="StringToVisibleIfNotNullOrWhiteSpaceConverter" />
         <converters:StringToVisibleIfNullOrWhiteSpaceConverter x:Key="StringToVisibleIfNullOrWhiteSpaceConverter" />
         <converters:FilePathToFileNameConverter x:Key="FilePathToFileNameConverter" />
-        <converters:FilePathToIconConverter x:Key="FilePathToIconConverter" />
+        <converters:ApplicationItemToIconConverter x:Key="ApplicationItemToIconConverter" />
         <converters:ApplicationItemVisibleIfNullOrWhiteSpaceConverter x:Key="ApplicationItemVisibleIfNullOrWhiteSpaceConverter" />
         <converters:VisibleIfNotNullConverter x:Key="VisibleIfNotNullConverter" />
     </mah:MetroWindow.Resources>
@@ -88,6 +88,14 @@
                                      FontSize="16"
                                      TextWrapping="Wrap"
                                      Margin="0 0 0 10" />
+                            <ComboBox ItemsSource="{Binding Path=AppTypes}" 
+                                      mah:TextBoxHelper.Watermark="Type"
+                                      mah:TextBoxHelper.UseFloatingWatermark="True"
+                                      DisplayMemberPath="Text"
+                                      SelectedValuePath="Value"
+                                      SelectedValue="{Binding Path=SelectedApp.ItemType}"
+                                      IsEnabled="{Binding IsInInsertMode, Mode=OneWay}"
+                                      Margin="0 0 0 10" />
                             <TextBox Text="{Binding SelectedApp.Description, UpdateSourceTrigger=PropertyChanged}"
                                      mah:TextBoxHelper.Watermark="Description"
                                      mah:TextBoxHelper.UseFloatingWatermark="True"
@@ -97,10 +105,10 @@
                                      MinLines="3"
                                      MaxLines="4"
                                      Margin="0 0 0 10" />
-                            <TextBlock TextWrapping="Wrap">
+                            <TextBlock TextWrapping="Wrap" mah:VisibilityHelper.IsVisible="{Binding IsFileType, Mode=OneWay}">
                                 <Image Width="16"
                                        Height="16" 
-                                       Source="{Binding SelectedApp.Path, Converter={StaticResource FilePathToIconConverter}}" 
+                                       Source="{Binding SelectedApp, Converter={StaticResource ApplicationItemToIconConverter}}" 
                                        mah:VisibilityHelper.IsVisible="{Binding SelectedApp.Path, Converter={StaticResource StringToVisibleIfNotNullOrWhiteSpaceConverter}}"/>
                                 <Hyperlink
                                     ToolTip="{Binding SelectedApp.Path}"
@@ -189,7 +197,7 @@
                                                     <DropShadowEffect ShadowDepth="1"/>
                                                 </Border.Effect>
                                                 <Border.Background>
-                                                    <ImageBrush ImageSource="{Binding Path, Converter={StaticResource FilePathToIconConverter}}"
+                                                    <ImageBrush ImageSource="{Binding Converter={StaticResource ApplicationItemToIconConverter}}"
                                                                     mah:VisibilityHelper.IsVisible="{Binding Path, Converter={StaticResource StringToVisibleIfNotNullOrWhiteSpaceConverter}}" />
                                                 </Border.Background>
                                             </Border>
