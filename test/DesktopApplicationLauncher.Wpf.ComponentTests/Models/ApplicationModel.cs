@@ -8,6 +8,8 @@
 
         public string Type { get; set; }
 
+        public int? ParentId { get; set; }
+
         public string HierarchyPath { get; set; }
     }
 }

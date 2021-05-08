@@ -92,12 +92,12 @@
         {
             var applications = _liteDbContext.Applications.List()
                 .Select(x => (x.Id, x.Name, x.ParentId, x.HierarchyPath, x.ItemType, x.SortOrder)).ToList();
-            var nodes = new List<Node<(int Id, string Name, ApplicationItemType? ItemType, string HierarchyPath)>>();
+            var nodes = new List<Node<(int Id, string Name, ApplicationItemType? ItemType, int? ParentId, string HierarchyPath)>>();
             var rootItems = applications.Where(x => x.ParentId == null).OrderBy(x => x.SortOrder).ToList();
             for (var i = 0; i < rootItems.Count; i++)
             {
                 var rootItem = rootItems[i];
-                var node = new Node<(int Id, string Name, ApplicationItemType? ItemType, string HierarchyPath)>((rootItem.Id, rootItem.Name, rootItem.ItemType, rootItem.HierarchyPath));
+                var node = new Node<(int Id, string Name, ApplicationItemType? ItemType, int? ParentId, string HierarchyPath)>((rootItem.Id, rootItem.Name, rootItem.ItemType, rootItem.ParentId, rootItem.HierarchyPath));
                 nodes.Add(node);
 
                 AddChildNodes(applications, node);
@@ -114,14 +114,15 @@
             return actual;
         }
 
-        private static void AddChildNodes(IList<ApplicationModel> items, Node<(int Id, string Name, ApplicationItemType? ItemType, string HierarchyPath)> node, int level = 0)
+        private static void AddChildNodes(IList<ApplicationModel> items, Node<(int Id, string Name, ApplicationItemType? ItemType, int? ParentId, string HierarchyPath)> node, int level = 0)
         {
             items.Add(new ApplicationModel
                           {
                               Id = node.Item.Id,
                               Name = level == 0 ? node.Item.Name : $"{new string('.', level)} {node.Item.Name}",
                               Type = node.Item.ItemType == ApplicationItemType.Folder ? "Folder" : "File",
-                              HierarchyPath = node.Item.HierarchyPath
+                              HierarchyPath = node.Item.HierarchyPath,
+                              ParentId = node.Item.ParentId
                           });
 
             var children = node.Children;
@@ -134,13 +135,13 @@
 
         private static void AddChildNodes(
             IList<(int Id, string Name, int? ParentId, string HierarchyPath, ApplicationItemType? ItemType, int SortOrder)> applications,
-            Node<(int Id, string Name, ApplicationItemType? ItemType, string HierarchyPath)> node)
+            Node<(int Id, string Name, ApplicationItemType? ItemType, int? ParentId, string HierarchyPath)> node)
         {
             var children = applications.Where(x => x.ParentId == node.Item.Id).OrderBy(x => x.SortOrder).ToList();
             for (var j = 0; j < children.Count; j++)
             {
                 var child = children[j];
-                var childNode = new Node<(int Id, string Name, ApplicationItemType? ItemType, string HierarchyPath)>((child.Id, child.Name, child.ItemType, child.HierarchyPath));
+                var childNode = new Node<(int Id, string Name, ApplicationItemType? ItemType, int? ParentId, string HierarchyPath)>((child.Id, child.Name, child.ItemType, child.ParentId, child.HierarchyPath));
                 node.Children.Add(childNode);
 
                 AddChildNodes(applications, childNode);
