@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ./src/DesktopApplicationLauncher.sln
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build ./src/DesktopApplicationLauncher.sln --no-restore --configuration Release
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: ForEach ($folder in (Get-ChildItem -Path test -Directory)) { dotnet test $folder.FullName --no-build --verbosity normal }
