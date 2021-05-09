@@ -1,2 +1,2 @@
 # DesktopApplicationLauncher
-Wpf Desktop Applicaiont Launcher Project
+Wpf Desktop Applicaion Launcher Project
