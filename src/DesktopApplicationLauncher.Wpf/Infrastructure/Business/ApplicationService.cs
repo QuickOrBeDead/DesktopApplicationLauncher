@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
 
@@ -151,8 +152,8 @@
             return result;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1310:Specify StringComparison for correctness", Justification = "Reviewed")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1307:Specify StringComparison for clarity", Justification = "Reviewed")]
+        [SuppressMessage("Globalization", "CA1310:Specify StringComparison for correctness", Justification = "Reviewed")]
+        [SuppressMessage("Globalization", "CA1307:Specify StringComparison for clarity", Justification = "Reviewed")]
         public void MoveToFolder(int sourceId, int targetId)
         {
             var target = _dbContext.Applications.GetById(targetId);

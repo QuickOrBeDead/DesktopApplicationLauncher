@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopApplicationLauncher.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopApplicationLauncher.Wpf.IntegrationTests", "..\test\DesktopApplicationLauncher.Wpf.IntegrationTests\DesktopApplicationLauncher.Wpf.IntegrationTests.csproj", "{D7F33BCD-D8A4-4328-80CF-CCFC2D3DA24B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopApplicationLauncher.Wpf.ComponentTests", "..\test\DesktopApplicationLauncher.Wpf.ComponentTests\DesktopApplicationLauncher.Wpf.ComponentTests.csproj", "{E0A5815A-9809-496E-A608-A3C5868A835B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopApplicationLauncher.Wpf.ComponentTests", "..\test\DesktopApplicationLauncher.Wpf.ComponentTests\DesktopApplicationLauncher.Wpf.ComponentTests.csproj", "{E0A5815A-9809-496E-A608-A3C5868A835B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8D7ACF32-A707-4877-B106-D2818978C84C}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

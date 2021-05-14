@@ -1,5 +1,6 @@
 ﻿namespace DesktopApplicationLauncher.Wpf.Controls
 {
+    using System;
     using System.Windows;
     using System.Windows.Documents;
     using System.Windows.Media;
@@ -15,6 +16,11 @@
 
         protected override void OnRender(DrawingContext drawingContext)
         {
+            if (drawingContext == null)
+            {
+                throw new ArgumentNullException(nameof(drawingContext));
+            }
+
             if (Location == DraggableBorderSwapItemsAdornerLocation.None)
             {
                 return;
