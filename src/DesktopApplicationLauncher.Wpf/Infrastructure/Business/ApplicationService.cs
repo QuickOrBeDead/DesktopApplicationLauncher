@@ -151,6 +151,8 @@
             return result;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1310:Specify StringComparison for correctness", Justification = "Reviewed")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1307:Specify StringComparison for clarity", Justification = "Reviewed")]
         public void MoveToFolder(int sourceId, int targetId)
         {
             var target = _dbContext.Applications.GetById(targetId);
@@ -225,6 +227,11 @@
 
         public int SaveApplication(ApplicationSaveModel saveModel)
         {
+            if (saveModel == null)
+            {
+                throw new ArgumentNullException(nameof(saveModel));
+            }
+
             if (saveModel.Id > 0)
             {
                 UpdateApplication(new ApplicationUpdateModel
