@@ -108,9 +108,9 @@
             }
         }
 
-        public bool IsInInsertMode => SelectedApp != null && SelectedApp.Id == 0;
+        public bool IsInInsertMode => SelectedApp is {Id: 0};
 
-        public bool IsFileType => SelectedApp != null && SelectedApp.ItemType == ApplicationItemType.File;
+        public bool IsFileType => SelectedApp is {ItemType: ApplicationItemType.File};
 
         public int? ParentId { get; set; }
 
