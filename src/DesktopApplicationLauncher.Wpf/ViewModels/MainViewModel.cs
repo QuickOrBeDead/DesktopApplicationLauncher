@@ -9,11 +9,11 @@
     using System.Windows;
     using System.Windows.Input;
 
-    using DesktopApplicationLauncher.Wpf.Commands;
-    using DesktopApplicationLauncher.Wpf.Infrastructure.Business;
-    using DesktopApplicationLauncher.Wpf.Infrastructure.Entities;
-    using DesktopApplicationLauncher.Wpf.Infrastructure.Extensions;
-    using DesktopApplicationLauncher.Wpf.Infrastructure.Models;
+    using Commands;
+    using Infrastructure.Business;
+    using Infrastructure.Entities;
+    using Infrastructure.Extensions;
+    using Infrastructure.Models;
 
     using Microsoft.Win32;
 
