@@ -108,15 +108,9 @@
             }
         }
 
-        public bool IsInInsertMode
-        {
-            get => SelectedApp != null && SelectedApp.Id == 0;
-        }
+        public bool IsInInsertMode => SelectedApp != null && SelectedApp.Id == 0;
 
-        public bool IsFileType
-        {
-            get => SelectedApp != null && SelectedApp.ItemType == ApplicationItemType.File;
-        }
+        public bool IsFileType => SelectedApp != null && SelectedApp.ItemType == ApplicationItemType.File;
 
         public int? ParentId { get; set; }
 
