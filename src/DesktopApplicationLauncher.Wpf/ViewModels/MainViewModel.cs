@@ -220,18 +220,14 @@
             {
                 for (var i = targetIndex - 1; i >= sourceIndex; i--)
                 {
-                    var next = Apps[i];
-                    Apps[i] = target;
-                    target = next;
+                    (Apps[i], target) = (target, Apps[i]);
                 }
             }
             else
             {
                 for (var i = targetIndex + 1; i <= sourceIndex; i++)
                 {
-                    var next = Apps[i];
-                    Apps[i] = target;
-                    target = next;
+                    (Apps[i], target) = (target, Apps[i]);
                 }
             }
 
