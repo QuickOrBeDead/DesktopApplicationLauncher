@@ -231,8 +231,8 @@
                 }
             }
 
-            int startIndex = Math.Min(sourceIndex, targetIndex);
-            int endIndex = Math.Max(sourceIndex, targetIndex);
+            var startIndex = Math.Min(sourceIndex, targetIndex);
+            var endIndex = Math.Max(sourceIndex, targetIndex);
             for (var i = startIndex; i <= endIndex; i++)
             {
                 var item = Apps[i];
