@@ -241,7 +241,8 @@
                                                               Name = saveModel.Name,
                                                               Description = saveModel.Description,
                                                               Arguments = saveModel.Arguments,
-                                                              Path = saveModel.Path
+                                                              Path = saveModel.Path,
+                                                              ParentId = saveModel.ParentId
                                                           });
 
                 return saveModel.Id;

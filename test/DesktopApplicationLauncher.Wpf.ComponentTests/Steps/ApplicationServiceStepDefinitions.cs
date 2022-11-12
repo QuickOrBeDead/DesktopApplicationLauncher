@@ -3,10 +3,10 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using DesktopApplicationLauncher.Wpf.ComponentTests.Models;
-    using DesktopApplicationLauncher.Wpf.Infrastructure.Business;
-    using DesktopApplicationLauncher.Wpf.Infrastructure.Data;
-    using DesktopApplicationLauncher.Wpf.Infrastructure.Entities;
+    using Models;
+    using Infrastructure.Business;
+    using Infrastructure.Data;
+    using Infrastructure.Entities;
     using DesktopApplicationLauncher.Wpf.Infrastructure.Models;
 
     using LiteDB;
@@ -63,6 +63,22 @@
             var targetId = GetFolderIdByName(targetFolder);
 
             _applicationService.MoveToFolder(sourceId, targetId);
+        }
+
+        [When(@"'(.*)' file is renamed to '(.*)'")]
+        public void WhenFileIsRenamedTo(string sourceFileName, string newFileName)
+        {
+            var source = GetApplicationByName(sourceFileName);
+
+            _applicationService.UpdateApplication(new ApplicationUpdateModel
+            {
+                Id = source.Id,
+                Name = newFileName,
+                ParentId = source.ParentId,
+                Arguments = source.Arguments,
+                Description = source.Description,
+                Path = source.Path
+            });
         }
 
         [Then(@"the result should be")]
@@ -214,6 +230,11 @@
         private int GetFolderIdByName(string name)
         {
             return _liteDbContext.Applications.ListDto(x => x.Id, x => x.Name == name).SingleOrDefault();
+        }
+
+        private Application GetApplicationByName(string name)
+        {
+            return _liteDbContext.Applications.ListDto(x => x, x => x.Name == name).SingleOrDefault();
         }
     }
 }
