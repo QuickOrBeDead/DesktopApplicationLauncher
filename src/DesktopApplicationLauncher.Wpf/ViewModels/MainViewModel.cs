@@ -246,7 +246,7 @@
 
         private void AddApp(object parameter)
         {
-            SelectedApp = parameter is ApplicationListItemModel model ? model : CreateAddApp();
+            SelectedApp = parameter as ApplicationListItemModel ?? CreateAddApp();
             AppViewWidth = 250;
         }
 
