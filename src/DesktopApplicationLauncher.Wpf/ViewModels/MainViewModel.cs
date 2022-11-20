@@ -282,10 +282,7 @@
                 {
                     try
                     {
-                        Process.Start(new ProcessStartInfo(appItem.Arguments)
-                                          {
-                                              UseShellExecute = true
-                                          });
+                        using var _ = Process.Start(new ProcessStartInfo(appItem.Arguments) {UseShellExecute = true});
                     }
                     catch (Exception exception)
                     {
@@ -296,7 +293,8 @@
                 {
                     try
                     {
-                        Process.Start(new ProcessStartInfo(appItem.Path)
+                        using var _ = Process.Start(
+                            new ProcessStartInfo(appItem.Path)
                                           {
                                               Arguments = appItem.Arguments,
                                               UseShellExecute = true,
