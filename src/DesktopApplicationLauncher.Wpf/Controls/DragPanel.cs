@@ -65,32 +65,39 @@
                     {
                         if (ReferenceEquals(source, target))
                         {
-                            return;
+                            return true;
                         }
 
                         var itemIsOver = CheckItemIsOver(source, target);
                         ItemsMove?.Execute((source.Index, target.Index, itemIsOver, false));
 
                         target.SetSwapItemsAdorner(GetItemsSwapAdornerLocation(source, target));
+
+                        return true;
                     });
         }
 
         private void DraggableBorder_StopMove(object sender, EventArgs e)
         {
             var source = (DraggableBorder)sender;
+            if (source == null || !IsDraggableItemExists(source))
+            {
+                return;
+            }
+
             ForEachItems(
                 target =>
                     {
-                        if (source == null || target == null)
+                        if (target == null)
                         {
-                            return;
+                            return true;
                         }
 
                         target.SetSwapItemsAdorner(DraggableBorderSwapItemsAdornerLocation.None);
 
                         if (ReferenceEquals(source, target))
                         {
-                            return;
+                            return true;
                         }
 
                         if (CheckItemsSwap(source, target))
@@ -102,6 +109,8 @@
 
                         var itemIsOver = CheckItemIsOver(source, target);
                         ItemsMove?.Execute((source.Index, target.Index, itemIsOver, true));
+
+                        return true;
                     });
         }
 
@@ -135,10 +144,32 @@
         private void SetDraggableItemsIndexes()
         {
             var index = 0;
-            ForEachItems(draggableBorder => draggableBorder.Index = index++);
+            ForEachItems(draggableBorder =>
+                {
+                    draggableBorder.Index = index++;
+                    return true;
+                });
         }
 
-        private void ForEachItems(Action<DraggableBorder> action)
+        private bool IsDraggableItemExists(DraggableBorder item)
+        {
+            var result = false;
+            ForEachItems(
+                x =>
+                    {
+                        if (ReferenceEquals(x, item))
+                        {
+                            result = true;
+                            return false;
+                        }
+
+                        return true;
+                    });
+
+            return result;
+        }
+
+        private void ForEachItems(Func<DraggableBorder, bool> func)
         {
             var itemsControl = GetItemsControl();
             if (itemsControl == null)
@@ -152,7 +183,11 @@
                 var contentPresenter = (ContentPresenter)itemsControl.ItemContainerGenerator.ContainerFromIndex(i);
 
                 var draggableBorder = contentPresenter.FindChild<DraggableBorder>();
-                action(draggableBorder);
+                var @continue = func(draggableBorder);
+                if (!@continue)
+                {
+                    break;
+                }
             }
         }
 
