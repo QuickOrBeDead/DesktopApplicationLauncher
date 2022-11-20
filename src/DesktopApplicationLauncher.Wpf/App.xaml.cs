@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Threading.Tasks;
     using System.Windows;
 
     using DesktopApplicationLauncher.Wpf.Infrastructure.Business;
@@ -37,7 +38,27 @@
             mainWindow.DataContext = new MainViewModel(mainWindow, new ApplicationService(_liteDbContext));
             mainWindow.Show();
 
+            AppDomain.CurrentDomain.UnhandledException += (_, ev) =>
+                HandleException(mainWindow, (Exception)ev.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+
+            DispatcherUnhandledException += (_, ev) =>
+                {
+                    HandleException(mainWindow, ev.Exception, "Application.Current.DispatcherUnhandledException");
+                    ev.Handled = true;
+                };
+
+            TaskScheduler.UnobservedTaskException += (_, ev) =>
+                {
+                    HandleException(mainWindow, ev.Exception, "TaskScheduler.UnobservedTaskException");
+                    ev.SetObserved();
+                };
+
             base.OnStartup(e);
+        }
+
+        private static void HandleException(Window mainWindow, Exception ex, string source)
+        {
+            MessageBox.Show(mainWindow, ex.ToString(), $"Unhandled exception ({source})", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         protected override void OnExit(ExitEventArgs e)
