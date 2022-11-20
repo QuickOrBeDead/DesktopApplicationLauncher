@@ -177,10 +177,15 @@
         {
             if (parameter is ParentFolderModel model)
             {
-                ParentId = model.Id == 0 ? null : model.Id;
-                LoadAllApps();
+                LoadFolderApps(model.Id == 0 ? null : model.Id);
             }
         }
+
+        private void LoadFolderApps(int? parentId)
+        {
+            ParentId = parentId;
+                LoadAllApps();
+            }
 
         private static bool CanConvertToFolder(object parameter)
         {
@@ -271,8 +276,7 @@
 
                 if (appItem.ItemType == ApplicationItemType.Folder)
                 {
-                    ParentId = appItem.Id;
-                    LoadAllApps();
+                    LoadFolderApps(appItem.Id);
                 }
                 else if (appItem.ItemType == ApplicationItemType.Website)
                 {
