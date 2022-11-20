@@ -103,6 +103,11 @@
             get => _appViewWidth;
             set
             {
+                if (value == _appViewWidth)
+                {
+                    return;
+                }
+
                 _appViewWidth = value;
                 OnPropertyChanged();
             }
@@ -184,8 +189,8 @@
         private void LoadFolderApps(int? parentId)
         {
             ParentId = parentId;
-                LoadAllApps();
-            }
+            LoadAllApps();
+        }
 
         private static bool CanConvertToFolder(object parameter)
         {
@@ -295,11 +300,11 @@
                     {
                         using var _ = Process.Start(
                             new ProcessStartInfo(appItem.Path)
-                                          {
-                                              Arguments = appItem.Arguments,
-                                              UseShellExecute = true,
-                                              WorkingDirectory = Path.GetDirectoryName(appItem.Path)!
-                                          });
+                                {
+                                    Arguments = appItem.Arguments,
+                                    UseShellExecute = true,
+                                    WorkingDirectory = Path.GetDirectoryName(appItem.Path)!
+                                });
                     }
                     catch (Exception exception)
                     {
