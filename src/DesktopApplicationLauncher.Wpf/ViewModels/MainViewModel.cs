@@ -2,14 +2,19 @@
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
+    using System.Net.Http;
     using System.Windows;
     using System.Windows.Input;
 
     using Commands;
+
+    using HtmlAgilityPack;
+
     using Infrastructure.Business;
     using Infrastructure.Entities;
     using Infrastructure.Extensions;
@@ -17,8 +22,12 @@
 
     using Microsoft.Win32;
 
+    using Application = System.Windows.Application;
+
     public sealed class MainViewModel : ViewModelBase
     {
+        private static readonly HttpClient HttpClient = new();
+
         private readonly Window _ownerWindow;
 
         private readonly IApplicationService _applicationService;
@@ -130,8 +139,8 @@
                     ApplicationItemType.Website => "Url",
                     _ => "Arguments",
                 };
-                }
             }
+        }
 
         public int? ParentId { get; set; }
 
@@ -263,6 +272,8 @@
         private void AddApp(object parameter)
         {
             SelectedApp = parameter as ApplicationListItemModel ?? CreateAddApp();
+            SelectedApp.PropertyChanged -= LoadWebsiteNameAndDescriptionEventHandler;
+            SelectedApp.PropertyChanged += LoadWebsiteNameAndDescriptionEventHandler;
             AppViewWidth = 250;
         }
 
@@ -368,8 +379,53 @@
                         OnPropertyChanged(nameof(IsFileType));
                         OnPropertyChanged(nameof(ArgumentsWatermark));
                     }
+
+                    
                 };
             return app;
+        }
+
+        private void LoadWebsiteNameAndDescriptionEventHandler(object obj, PropertyChangedEventArgs eventArgs)
+        {
+            if (obj is ApplicationListItemModel application
+                && eventArgs.PropertyName == nameof(application.Arguments)
+                && application.ItemType == ApplicationItemType.Website
+                && (string.IsNullOrWhiteSpace(application.Name) || string.IsNullOrWhiteSpace(application.Description))
+                && !string.IsNullOrWhiteSpace(application.Arguments)
+                && Uri.TryCreate(application.Arguments, UriKind.Absolute, out var uri))
+            {
+                _ = Application.Current.Dispatcher.InvokeAsync(async () =>
+                    {
+                        try
+                        {
+                            var doc = new HtmlDocument();
+                            doc.LoadHtml(await HttpClient.GetStringAsync(uri));
+                            if (string.IsNullOrWhiteSpace(application.Name))
+                            {
+                                var titleNode = doc.DocumentNode.SelectSingleNode("//head/title");
+                                if (titleNode != null)
+                                {
+                                    application.Name = titleNode.InnerText;
+                                }
+                            }
+
+                            if (string.IsNullOrWhiteSpace(application.Description))
+                            {
+                                var descriptionNode = doc.DocumentNode.SelectSingleNode("//meta[@name='description']");
+                                var content = descriptionNode?.Attributes["content"];
+                                if (content != null)
+                                {
+                                    application.Description = content.Value;
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            // empty
+                        }
+                        
+                    });
+            }
         }
 
         private void AddAppPath(object parameter)
