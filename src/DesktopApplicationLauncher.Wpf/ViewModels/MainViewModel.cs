@@ -93,6 +93,8 @@
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsInInsertMode));
                 OnPropertyChanged(nameof(IsFileType));
+                OnPropertyChanged(nameof(ItemType));
+                OnPropertyChanged(nameof(ArgumentsWatermark));
             }
         }
 
@@ -116,6 +118,22 @@
         public bool IsInInsertMode => SelectedApp is {Id: 0};
 
         public bool IsFileType => SelectedApp is {ItemType: ApplicationItemType.File};
+
+        public ApplicationItemType ItemType => SelectedApp?.ItemType ?? ApplicationItemType.File;
+
+        public string ArgumentsWatermark
+        {
+            get
+            {
+                switch (ItemType)
+                {
+                    case ApplicationItemType.Website:
+                        return "Url";
+                    default:
+                        return "Arguments";
+                }
+            }
+        }
 
         public int? ParentId { get; set; }
 
@@ -350,6 +368,7 @@
                     if (e.PropertyName == nameof(SelectedApp.ItemType))
                     {
                         OnPropertyChanged(nameof(IsFileType));
+                        OnPropertyChanged(nameof(ArgumentsWatermark));
                     }
                 };
             return app;

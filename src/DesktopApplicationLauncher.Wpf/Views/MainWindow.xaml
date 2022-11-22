@@ -129,13 +129,13 @@
                                      TextWrapping="Wrap"
                                      AcceptsTab="True"
                                      AcceptsReturn="True"
-                                     mah:TextBoxHelper.Watermark="Arguments"
+                                     mah:TextBoxHelper.Watermark="{Binding ArgumentsWatermark}"
                                      MinLines="3" />
                             <Button 
                                 Command="{Binding SaveAppCommand}"
                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
                                 mah:VisibilityHelper.IsVisible="{Binding SelectedApp, Converter={StaticResource ApplicationItemVisibleIfNullOrWhiteSpaceConverter}}">
-                                Save App
+                                Save
                             </Button>
                             <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                      ScrollViewer.VerticalScrollBarVisibility="Disabled" />
