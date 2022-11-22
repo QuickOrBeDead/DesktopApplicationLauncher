@@ -125,15 +125,13 @@
         {
             get
             {
-                switch (ItemType)
+                return ItemType switch
                 {
-                    case ApplicationItemType.Website:
-                        return "Url";
-                    default:
-                        return "Arguments";
+                    ApplicationItemType.Website => "Url",
+                    _ => "Arguments",
+                };
                 }
             }
-        }
 
         public int? ParentId { get; set; }
 
