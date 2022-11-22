@@ -56,16 +56,33 @@
             base.OnStartup(e);
         }
 
-        private static void HandleException(Window mainWindow, Exception ex, string source)
-        {
-            MessageBox.Show(mainWindow, ex.ToString(), $"Unhandled exception ({source})", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
         protected override void OnExit(ExitEventArgs e)
         {
             _liteDbContext.Dispose();
 
             base.OnExit(e);
+        }
+
+        private static void HandleException(Window mainWindow, Exception ex, string source)
+        {
+            if (Current.Dispatcher.CheckAccess())
+            {
+                ShowException(mainWindow, ex, source);
+            }
+            else
+            {
+                Current.Dispatcher.Invoke(() => ShowException(mainWindow, ex, source));
+            }
+        }
+
+        private static void ShowException(Window mainWindow, Exception ex, string source)
+        {
+            MessageBox.Show(
+                mainWindow,
+                ex.ToString(),
+                $"Unhandled exception ({source})",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
     }
 }
