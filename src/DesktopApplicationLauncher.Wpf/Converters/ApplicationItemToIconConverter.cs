@@ -85,12 +85,13 @@
 
             private static Icon FetchFolderIcon()
             {
-                var tmpDir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())).FullName;
-                var icon = ExtractFromPath(tmpDir);
-                Directory.Delete(tmpDir);
+                var tempDir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())).FullName;
+                var icon = ExtractFromPath(tempDir);
+                Directory.Delete(tempDir);
                 return icon;
             }
 
+            [SuppressMessage("Minor Code Smell", "CA1704:Identifiers should be spelled correctly", Justification = "<Pending>")]
             private static Icon ExtractFromPath(string path)
             {
                 var shinfo = new SHFILEINFO();
@@ -103,6 +104,8 @@
 
             //Struct used by SHGetFileInfo function
             [StructLayout(LayoutKind.Sequential)]
+            [SuppressMessage("Minor Code Smell", "S101:Types should be named in PascalCase", Justification = "<Pending>")]
+            [SuppressMessage("Minor Code Smell", "CA1704:Identifiers should be spelled correctly", Justification = "<Pending>")]
             private struct SHFILEINFO
             {
                 public IntPtr hIcon;
@@ -116,8 +119,11 @@
 
             [DllImport(dllName: "shell32.dll", CharSet = CharSet.Unicode)]
             [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+            [SuppressMessage("Minor Code Smell", "CA1704:Identifiers should be spelled correctly", Justification = "<Pending>")]
             private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
 
+            [SuppressMessage("Minor Code Smell", "S101:Types should be named in PascalCase", Justification = "<Pending>")]
+            [SuppressMessage("Minor Code Smell", "CA1704:Identifiers should be spelled correctly", Justification = "<Pending>")]
             private const uint SHGFI_ICON = 0x100;
         }
     }
