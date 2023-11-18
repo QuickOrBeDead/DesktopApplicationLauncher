@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <OutputType>WinExe</OutputType>
-	  <TargetFramework>net8.0-windows</TargetFramework>
-	  <UseWPF>true</UseWPF>
-	  <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-	  <PackageIcon>icon.png</PackageIcon>
-	  <ApplicationIcon>icon.ico</ApplicationIcon>
+      <OutputType>WinExe</OutputType>
+      <TargetFramework>net8.0-windows</TargetFramework>
+      <UseWPF>true</UseWPF>
+      <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+      <PackageIcon>icon.png</PackageIcon>
+      <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>C:\Projects\AppLauncher\</OutputPath>
   </PropertyGroup>
-	
+    
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
@@ -47,10 +47,10 @@
     </PackageReference>
   </ItemGroup>
 
-	<ItemGroup>
-		<None Update="appsettings.json">
+    <ItemGroup>
+        <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-	</ItemGroup>
+    </ItemGroup>
 
 </Project>
