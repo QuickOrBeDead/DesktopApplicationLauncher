@@ -49,5 +49,5 @@ jobs:
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"QuickOrBeDead_DesktopApplicationLauncher" /o:"quickorbedead" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build ./src/DesktopApplicationLauncher.sln --configuration Release
-          ForEach ($folder in (Get-ChildItem -Path test -Directory)) { dotnet test $folder.FullName --no-build --verbosity normal --configuration Release }
+          ForEach ($folder in (Get-ChildItem -Path test -Directory)) { dotnet test $folder.FullName --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;LogFileName=unittests.trx" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover }
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
