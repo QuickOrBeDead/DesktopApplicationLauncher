@@ -12,6 +12,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>C:\Projects\AppLauncher\</OutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CodeAnalaysisDictionary.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="CodeAnalaysisDictionary.xml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
     
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
