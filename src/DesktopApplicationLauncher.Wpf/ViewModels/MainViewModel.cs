@@ -8,6 +8,7 @@
     using System.IO;
     using System.Linq;
     using System.Net.Http;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Input;
 
@@ -379,11 +380,11 @@
                         OnPropertyChanged(nameof(IsFileType));
                         OnPropertyChanged(nameof(ArgumentsWatermark));
                     }
-
                 };
             return app;
         }
 
+        [SuppressMessage("Design", "CA1031: Do not catch general exception types", Justification = "Reviewed")]
         private void LoadWebsiteNameAndDescriptionEventHandler(object obj, PropertyChangedEventArgs eventArgs)
         {
             if (obj is ApplicationListItemModel application
@@ -393,37 +394,38 @@
                 && !string.IsNullOrWhiteSpace(application.Arguments)
                 && Uri.TryCreate(application.Arguments, UriKind.Absolute, out var uri))
             {
-                _ = Application.Current.Dispatcher.InvokeAsync(async () =>
+                _ = Application.Current.Dispatcher.InvokeAsync(() => LoadWebSiteNameAndDescription(uri, application));
+            }
+        }
+
+        private static async Task LoadWebSiteNameAndDescription(Uri uri, ApplicationListItemModel application)
+        {
+            try
+            {
+                var doc = new HtmlDocument();
+                doc.LoadHtml(await HttpClient.GetStringAsync(uri).ConfigureAwait(false));
+                if (string.IsNullOrWhiteSpace(application.Name))
+                {
+                    var titleNode = doc.DocumentNode.SelectSingleNode("//head/title");
+                    if (titleNode != null)
                     {
-                        try
-                        {
-                            var doc = new HtmlDocument();
-                            doc.LoadHtml(await HttpClient.GetStringAsync(uri).ConfigureAwait(false));
-                            if (string.IsNullOrWhiteSpace(application.Name))
-                            {
-                                var titleNode = doc.DocumentNode.SelectSingleNode("//head/title");
-                                if (titleNode != null)
-                                {
-                                    application.Name = titleNode.InnerText;
-                                }
-                            }
+                        application.Name = titleNode.InnerText;
+                    }
+                }
 
-                            if (string.IsNullOrWhiteSpace(application.Description))
-                            {
-                                var descriptionNode = doc.DocumentNode.SelectSingleNode("//meta[@name='description']");
-                                var content = descriptionNode?.Attributes["content"];
-                                if (content != null)
-                                {
-                                    application.Description = content.Value;
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            // empty
-                        }
-
-                    });
+                if (string.IsNullOrWhiteSpace(application.Description))
+                {
+                    var descriptionNode = doc.DocumentNode.SelectSingleNode("//meta[@name='description']");
+                    var content = descriptionNode?.Attributes["content"];
+                    if (content != null)
+                    {
+                        application.Description = content.Value;
+                    }
+                }
+            }
+            catch
+            {
+                // empty
             }
         }
 

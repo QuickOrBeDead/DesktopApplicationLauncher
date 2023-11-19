@@ -120,6 +120,7 @@
             [DllImport(dllName: "shell32.dll", CharSet = CharSet.Unicode)]
             [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
             [SuppressMessage("Minor Code Smell", "CA1704:Identifiers should be spelled correctly", Justification = "<Pending>")]
+            [SuppressMessage("Minor Code Smell", "SYSLIB1054:Mark the method 'SHGetFileInfo' with 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time", Justification = "<Pending>")]
             private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
 
             [SuppressMessage("Minor Code Smell", "S101:Types should be named in PascalCase", Justification = "<Pending>")]

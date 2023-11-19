@@ -14,7 +14,7 @@
     [TestFixture]
     public sealed class ApplicationServiceFixture
     {
-        private IDbContext _liteDbContext;
+        private LiteDbContext _liteDbContext;
 
         private ApplicationService _applicationService;
 
