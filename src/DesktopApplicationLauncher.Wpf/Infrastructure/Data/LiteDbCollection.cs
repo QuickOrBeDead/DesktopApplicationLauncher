@@ -16,10 +16,7 @@
 
         public LiteDbCollection(ILiteDatabase database)
         {
-            if (database == null)
-            {
-                throw new ArgumentNullException(nameof(database));
-            }
+            ArgumentNullException.ThrowIfNull(database);
 
             _collection = database.GetCollection<TEntity>(typeof(TEntity).Name);
         }
@@ -37,10 +34,7 @@
             Expression<Func<TEntity, object>> orderBy = null,
             bool ascending = true)
         {
-            if (selectExpression == null)
-            {
-                throw new ArgumentNullException(nameof(selectExpression));
-            }
+            ArgumentNullException.ThrowIfNull(selectExpression);
 
             var query = Query(filter, orderBy, ascending);
 
@@ -77,20 +71,14 @@
 
         public TEntity GetById(object id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
+            ArgumentNullException.ThrowIfNull(id);
 
             return _collection.FindOne($"$._id = {id}");
         }
 
         public IList<TEntity> GetByIds(object[] ids)
         {
-            if (ids == null)
-            {
-                throw new ArgumentNullException(nameof(ids));
-            }
+            ArgumentNullException.ThrowIfNull(ids);
 
             return _collection.Find(LiteDB.Query.In("_id", ids.Cast<BsonValue>())).ToList();
         }

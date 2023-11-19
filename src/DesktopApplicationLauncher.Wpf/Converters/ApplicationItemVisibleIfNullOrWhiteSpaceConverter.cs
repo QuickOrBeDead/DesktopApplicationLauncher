@@ -20,12 +20,10 @@
                 
                 if (applicationItem.ItemType == ApplicationItemType.Website)
                 {
-                    return !string.IsNullOrWhiteSpace(applicationItem.Name)
-                           && !string.IsNullOrWhiteSpace(applicationItem.Arguments);
+                    return !string.IsNullOrWhiteSpace(applicationItem.Name) && !string.IsNullOrWhiteSpace(applicationItem.Arguments);
                 }
 
-                return !string.IsNullOrWhiteSpace(applicationItem.Name)
-                       && !string.IsNullOrWhiteSpace(applicationItem.Path);
+                return !string.IsNullOrWhiteSpace(applicationItem.Name) && !string.IsNullOrWhiteSpace(applicationItem.Path);
             }
 
             return false;

@@ -33,7 +33,6 @@
                 using var iconForFile = GetIconForFile(filePath);
 
                 return GetBitmapSource(iconForFile);
-
             }
 
             return GetBitmapSource(SystemIcons.WinLogo);

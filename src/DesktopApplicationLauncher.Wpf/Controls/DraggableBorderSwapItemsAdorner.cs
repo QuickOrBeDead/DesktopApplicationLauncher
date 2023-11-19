@@ -16,10 +16,7 @@
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            if (drawingContext == null)
-            {
-                throw new ArgumentNullException(nameof(drawingContext));
-            }
+            ArgumentNullException.ThrowIfNull(drawingContext);
 
             if (Location == DraggableBorderSwapItemsAdornerLocation.None)
             {

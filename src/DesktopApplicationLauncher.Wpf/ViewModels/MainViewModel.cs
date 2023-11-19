@@ -399,7 +399,7 @@
                         try
                         {
                             var doc = new HtmlDocument();
-                            doc.LoadHtml(await HttpClient.GetStringAsync(uri));
+                            doc.LoadHtml(await HttpClient.GetStringAsync(uri).ConfigureAwait(false));
                             if (string.IsNullOrWhiteSpace(application.Name))
                             {
                                 var titleNode = doc.DocumentNode.SelectSingleNode("//head/title");

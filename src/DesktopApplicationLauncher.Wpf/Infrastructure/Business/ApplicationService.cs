@@ -40,10 +40,7 @@
 
         public int AddApplication(ApplicationAddModel addModel)
         {
-            if (addModel == null)
-            {
-                throw new ArgumentNullException(nameof(addModel));
-            }
+            ArgumentNullException.ThrowIfNull(addModel);
 
             var application = AddApplicationInternal(addModel);
 
@@ -52,10 +49,7 @@
 
         public void UpdateApplication(ApplicationUpdateModel updateModel)
         {
-            if (updateModel == null)
-            {
-                throw new ArgumentNullException(nameof(updateModel));
-            }
+            ArgumentNullException.ThrowIfNull(updateModel);
 
             _dbContext.Applications.Update(
                 _ => new Application
@@ -228,10 +222,7 @@
 
         public int SaveApplication(ApplicationSaveModel saveModel)
         {
-            if (saveModel == null)
-            {
-                throw new ArgumentNullException(nameof(saveModel));
-            }
+            ArgumentNullException.ThrowIfNull(saveModel);
 
             if (saveModel.Id > 0)
             {

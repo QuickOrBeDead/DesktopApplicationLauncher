@@ -3,13 +3,15 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Models;
+    using DesktopApplicationLauncher.Wpf.Infrastructure.Models;
+
     using Infrastructure.Business;
     using Infrastructure.Data;
     using Infrastructure.Entities;
-    using DesktopApplicationLauncher.Wpf.Infrastructure.Models;
 
     using LiteDB;
+
+    using Models;
 
     using TechTalk.SpecFlow;
     using TechTalk.SpecFlow.Assist;
@@ -20,7 +22,7 @@
         private readonly ScenarioContext _scenarioContext;
 
         private ApplicationService _applicationService;
-        private IDbContext _liteDbContext;
+        private LiteDbContext _liteDbContext;
 
         public ApplicationServiceStepDefinitions(ScenarioContext scenarioContext)
         {
@@ -104,7 +106,7 @@
             }
         }
 
-        private IList<ApplicationModel> GetApplicationsTable()
+        private List<ApplicationModel> GetApplicationsTable()
         {
             var applications = _liteDbContext.Applications.List()
                 .Select(x => (x.Id, x.Name, x.ParentId, x.HierarchyPath, x.ItemType, x.SortOrder)).ToList();
@@ -173,9 +175,9 @@
             }
         }
 
-        private static IList<Node<(string Name, ApplicationItemType ItemType)>> CreateFolderTree(Table table)
+        private static List<Node<(string Name, ApplicationItemType ItemType)>> CreateFolderTree(Table table)
         {
-            IList<Node<(string Name, ApplicationItemType ItemType)>> nodes = new List<Node<(string Name, ApplicationItemType ItemType)>>();
+            var nodes = new List<Node<(string Name, ApplicationItemType ItemType)>>();
             var stack = new Stack<Node<(string Name, ApplicationItemType ItemType)>>();
 
             var prevLevel = 0;
