@@ -380,7 +380,6 @@
                         OnPropertyChanged(nameof(ArgumentsWatermark));
                     }
 
-                    
                 };
             return app;
         }
@@ -423,7 +422,7 @@
                         {
                             // empty
                         }
-                        
+
                     });
             }
         }

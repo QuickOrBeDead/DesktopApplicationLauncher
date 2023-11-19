@@ -105,6 +105,7 @@
             [StructLayout(LayoutKind.Sequential)]
             [SuppressMessage("Minor Code Smell", "S101:Types should be named in PascalCase", Justification = "<Pending>")]
             [SuppressMessage("Minor Code Smell", "CA1704:Identifiers should be spelled correctly", Justification = "<Pending>")]
+            [SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "<Pending>")]
             private struct SHFILEINFO
             {
                 public IntPtr hIcon;

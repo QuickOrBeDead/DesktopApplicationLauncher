@@ -157,7 +157,7 @@
                 _isHighlighted = value;
 
                 OnPropertyChanged();
-            } 
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

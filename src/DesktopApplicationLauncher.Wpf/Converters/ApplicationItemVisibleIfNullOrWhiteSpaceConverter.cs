@@ -16,8 +16,8 @@
                 if (applicationItem.ItemType == ApplicationItemType.Folder)
                 {
                     return !string.IsNullOrWhiteSpace(applicationItem.Name);
-                } 
-                
+                }
+
                 if (applicationItem.ItemType == ApplicationItemType.Website)
                 {
                     return !string.IsNullOrWhiteSpace(applicationItem.Name) && !string.IsNullOrWhiteSpace(applicationItem.Arguments);

@@ -1,6 +1,7 @@
 ﻿namespace DesktopApplicationLauncher.Wpf.Commands
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Windows.Input;
 
     public sealed class RelayCommand : ICommand
@@ -15,6 +16,7 @@
             _canExecuteFunc = canExecuteFunc;
         }
 
+        [SuppressMessage("Roslynator", "RCS1146:Use conditional access.", Justification = "<Pending>")]
         public bool CanExecute(object parameter)
         {
             return _canExecuteFunc == null || _canExecuteFunc.Invoke(parameter);

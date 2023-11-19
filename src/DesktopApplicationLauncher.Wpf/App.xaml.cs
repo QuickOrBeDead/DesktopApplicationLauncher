@@ -20,7 +20,7 @@
     [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Reviewed. LiteDbContext is disposed at OnExit method.")]
     public partial class App
     {
-        private IDbContext _liteDbContext;
+        private LiteDbContext _liteDbContext;
 
         protected override void OnStartup(StartupEventArgs e)
         {
