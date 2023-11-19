@@ -384,7 +384,6 @@
             return app;
         }
 
-        [SuppressMessage("Design", "CA1031: Do not catch general exception types", Justification = "Reviewed")]
         private void LoadWebsiteNameAndDescriptionEventHandler(object obj, PropertyChangedEventArgs eventArgs)
         {
             if (obj is ApplicationListItemModel application
@@ -398,6 +397,7 @@
             }
         }
 
+        [SuppressMessage("Design", "CA1031: Do not catch general exception types", Justification = "Reviewed")]
         private static async Task LoadWebSiteNameAndDescription(Uri uri, ApplicationListItemModel application)
         {
             try
